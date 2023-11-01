@@ -3,7 +3,7 @@
 name: CC - GitHub all Ubuntu 20.04
 "on":
   schedule:
-  - cron: 30 1 * * 2
+    - cron: 30 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -23,48 +23,48 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - cc: clang
-          cxx: clang++
-        - cc: gcc
-          cxx: g++
-        - cc: clang-10
-          cxx: clang++-10
-        - cc: clang-11
-          cxx: clang++-11
-        - cc: clang-12
-          cxx: clang++-12
-        - cc: gcc-9
-          cxx: g++-9
-        - cc: gcc-10
-          cxx: g++-10
+          - cc: clang
+            cxx: clang++
+          - cc: gcc
+            cxx: g++
+          - cc: clang-10
+            cxx: clang++-10
+          - cc: clang-11
+            cxx: clang++-11
+          - cc: clang-12
+            cxx: clang++-12
+          - cc: gcc-9
+            cxx: g++-9
+          - cc: gcc-10
+            cxx: g++-10
     env:
       CC: ${{ matrix.cc }}
       CXX: ${{ matrix.cxx }}
     steps:
-    - name: Display environment
-      run: |
-        uname -a; pwd; id; umask
-        env -0 | LC_ALL=C sort -z | tr '\000' '\n'
-    - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
-      run: |
-        # git config
-        git config --global core.autocrlf false
-        git config --global --add safe.directory '*'
-        # install Self, needed for config file below
-        ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+      - name: Display environment
+        run: |
+          uname -a; pwd; id; umask
+          env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+      - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
+        run: |
+          # git config
+          git config --global core.autocrlf false
+          git config --global --add safe.directory '*'
+          # install Self, needed for config file below
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
 
-        git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
-        test -f ./.gitmodules && git submodule update --init
-        # TODO: handle REMOTE_REF_TYPE == "tag"
-        # update environment
-        rev="$(git rev-parse HEAD)"
-        echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
-    - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
-      run: make build/debug
-    - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
-      run: make build/release
-    - name: Run tests
-      run: |
-        ctest --test-dir build/debug
-        ctest --test-dir build/release
-        env -C build/release bash "$PWD"/misc/testsuite/test_symlinks.sh
+          git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
+          test -f ./.gitmodules && git submodule update --init
+          # TODO: handle REMOTE_REF_TYPE == "tag"
+          # update environment
+          rev="$(git rev-parse HEAD)"
+          echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
+      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/debug
+      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/release
+      - name: Run tests
+        run: |
+          ctest --test-dir build/debug
+          ctest --test-dir build/release
+          env -C build/release bash "$PWD"/misc/testsuite/test_symlinks.sh

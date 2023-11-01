@@ -16,23 +16,23 @@ jobs:
     name: REUSE Compliance Check
     runs-on: ubuntu-latest
     steps:
-    - name: Display environment
-      run: |
-        uname -a; pwd; id; umask
-        env -0 | LC_ALL=C sort -z | tr '\000' '\n'
-    - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
-      run: |
-        # git config
-        git config --global core.autocrlf false
-        git config --global --add safe.directory '*'
-        # install Self, needed for config file below
-        ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+      - name: Display environment
+        run: |
+          uname -a; pwd; id; umask
+          env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+      - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
+        run: |
+          # git config
+          git config --global core.autocrlf false
+          git config --global --add safe.directory '*'
+          # install Self, needed for config file below
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
 
-        git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
-        test -f ./.gitmodules && git submodule update --init
-        # TODO: handle REMOTE_REF_TYPE == "tag"
-        # update environment
-        rev="$(git rev-parse HEAD)"
-        echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
-    - name: REUSE Compliance Check
-      uses: fsfe/reuse-action@v2
+          git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
+          test -f ./.gitmodules && git submodule update --init
+          # TODO: handle REMOTE_REF_TYPE == "tag"
+          # update environment
+          rev="$(git rev-parse HEAD)"
+          echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v2

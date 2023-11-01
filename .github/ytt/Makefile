@@ -1,4 +1,5 @@
 PYTHON3 = python3
+YQ      = yq
 YTT     = ytt
 
 .PHONY: PHONY
@@ -26,11 +27,11 @@ DEPS = $(MAKEFILE_LIST) | ../workflows/.
 
 ../workflows/%.yml : %.yml $(DEPS)
 	$(call header,$@)
-	$(YTT) -f- < $< >> $@
+	$(YTT) -f- < $< | $(YQ) >> $@
 
 ../workflows/%.yml : %.yml.py $(DEPS)
 	$(call header,$@)
-	$(PYTHON3) $< | $(YTT) -f- >> $@
+	$(PYTHON3) $< | $(YTT) -f- | $(YQ) >> $@
 
 # directories
 %/. : ; @mkdir -v $(dir $@)
