@@ -45,6 +45,8 @@ jobs:
         run: |
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+      - run: dpkg -l
+        if: ${{ matrix.cc == 'gcc' }}
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config
