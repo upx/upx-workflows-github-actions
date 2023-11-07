@@ -1,0 +1,96 @@
+# Copyright (C) Markus Franz Xaver Johannes Oberhumer
+# DO NOT EDIT, GENERATED AUTOMATICALLY
+name: CC - container Alpine clang
+"on":
+  schedule:
+    - cron: 00 1 * * 2
+  workflow_dispatch: null
+env:
+  CMAKE_REQUIRED_QUIET: "OFF"
+  CTEST_OUTPUT_ON_FAILURE: "ON"
+  DEBIAN_FRONTEND: noninteractive
+  VERBOSE: 1
+  REMOTE_REF_NAME: devel
+  REMOTE_REF_TYPE: branch
+  REMOTE_REPOSITORY: upx/upx
+  REMOTE_SERVER_URL: https://github.com
+  REMOTE_SHA: "0000000000000000000000000000000000000000"
+jobs:
+  clang:
+    if: github.repository_owner == 'upx'
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - container: alpine:3.10
+          - container: alpine:3.11
+          - container: alpine:3.12
+          - container: alpine:3.13
+          - container: alpine:3.14
+          - container: alpine:3.15
+          - container: alpine:3.16
+          - container: alpine:3.17
+          - container: alpine:3.18
+          - container: alpine:edge
+          - container: i386/alpine:3.12
+          - container: i386/alpine:3.13
+          - container: i386/alpine:3.14
+          - container: i386/alpine:3.15
+          - container: i386/alpine:3.16
+          - container: i386/alpine:3.17
+          - container: i386/alpine:3.18
+          - container: i386/alpine:edge
+    env:
+      CC: clang
+      CXX: clang++
+    steps:
+      - name: Display environment
+        run: |
+          uname -a; pwd; id; umask
+          env | LC_ALL=C sort
+      - name: ${{ format('Install packages {0}', matrix.container) }}
+        run: |
+          apk update && apk upgrade && apk add cmake clang git make
+          case ${{ matrix.container }} in
+            # g++ is needed on Alpine <= 3.18 because of missing dependencies
+            *:3.[0-9] | *:3.1[0-8]) apk add g++ ;;
+          esac
+          case ${{ matrix.container }} in
+            # clang-dev is needed on Alpine <= 3.11 for clang headers like <emmintrin.h>
+            *:3.[0-9] | *:3.1[0-1]) apk add clang-dev ;;
+          esac
+          case ${{ matrix.container }} in
+            # llvm-dev is needed on Alpine <= 3.18 for -flto (-flto only works on Alpine >= 3.15)
+            *:3.1[5-8]) apk add llvm-dev ;;
+          esac
+      - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
+        run: |
+          # git config
+          git config --global core.autocrlf false
+          git config --global --add safe.directory '*'
+          # install Self, needed for config file below
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+
+          git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
+          test -f ./.gitmodules && git submodule update --init
+          # TODO: handle REMOTE_REF_TYPE == "tag"
+          # update environment
+          rev="$(git rev-parse HEAD)"
+          echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
+      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/debug
+      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/release
+      - name: Run tests
+        run: |
+          # INFO: "ctest --test-dir DIR" only works on Alpine >= 3.14 (cmake-3.20.6)
+          (cd build/debug && ctest)
+          (cd build/release && ctest)
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            apk add bash sudo
+            # IMPORTANT: do NOT run as user root!
+            (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true

@@ -7,6 +7,10 @@ YTT     = ytt
 .SUFFIXES:
 
 BUILT_FILES :=
+BUILT_FILES += ../workflows/cc-container-alpine-clang.yml
+BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw32-gcc.yml
+BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw64-gcc.yml
+BUILT_FILES += ../workflows/cc-container-alpine-gcc.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-11.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-12.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-13.yml

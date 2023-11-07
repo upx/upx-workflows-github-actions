@@ -3,7 +3,7 @@
 name: CC - GitHub all macOS 12
 "on":
   schedule:
-    - cron: 05 1 * * 2
+    - cron: 05 2 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -67,4 +67,7 @@ jobs:
         run: |
           ctest --test-dir build/debug
           #ctest --test-dir build/release
-          (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true

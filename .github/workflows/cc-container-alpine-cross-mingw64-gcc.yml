@@ -1,34 +1,54 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # DO NOT EDIT, GENERATED AUTOMATICALLY
-name: Misc - Spell check
+name: CC - container Alpine mingw64-gcc
 "on":
   schedule:
-    - cron: 55 0 * * 3
+    - cron: 15 1 * * 2
   workflow_dispatch: null
 env:
+  CMAKE_REQUIRED_QUIET: "OFF"
+  CTEST_OUTPUT_ON_FAILURE: "ON"
   DEBIAN_FRONTEND: noninteractive
+  VERBOSE: 1
   REMOTE_REF_NAME: devel
   REMOTE_REF_TYPE: branch
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:
-  job-spell-check:
+  mingw64-gcc:
     if: github.repository_owner == 'upx'
-    name: Spell check
     runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - container: alpine:3.13
+          - container: alpine:3.14
+          - container: alpine:3.15
+          - container: alpine:3.16
+          - container: alpine:3.17
+          - container: alpine:3.18
+          - container: alpine:edge
+    env:
+      CC: x86_64-w64-mingw32-gcc -static
+      CXX: x86_64-w64-mingw32-g++ -static
     steps:
       - name: Display environment
         run: |
           uname -a; pwd; id; umask
-          env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+          env | LC_ALL=C sort
+      - name: ${{ format('Install packages {0}', matrix.container) }}
+        run: |
+          apk update && apk upgrade && apk add cmake git make mingw-w64-gcc
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config
           git config --global core.autocrlf false
           git config --global --add safe.directory '*'
           # install Self, needed for config file below
-          git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
 
           git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
           test -f ./.gitmodules && git submodule update --init
@@ -36,7 +56,7 @@ jobs:
           # update environment
           rev="$(git rev-parse HEAD)"
           echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
-      - name: Spell check with crate-ci/typos
-        uses: crate-ci/typos@c97d621b6b01d8b0258538ca15abeca5c5764601
-        with:
-          config: ../Self/.github/typos_config_upx.toml
+      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/debug
+      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/release

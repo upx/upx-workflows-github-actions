@@ -3,7 +3,7 @@
 name: CC - GitHub all macOS 11
 "on":
   schedule:
-    - cron: 00 1 * * 2
+    - cron: 00 2 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -71,4 +71,7 @@ jobs:
         run: |
           ctest --test-dir build/debug
           #ctest --test-dir build/release
-          #(cd build/release && bash ../../misc/testsuite/test_symlinks.sh) # macos-11 lacks "readlink -f"
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            #(cd build/release && bash ../../misc/testsuite/test_symlinks.sh) # macos-11 lacks "readlink -f"
+          fi
+          true

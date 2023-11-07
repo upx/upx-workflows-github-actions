@@ -4,7 +4,7 @@
 
 name: 'CC - GitHub all macOS 13'
 "on":
-  schedule: [cron: '10 1 * * 2'] # run weekly Tuesday 01:10 UTC
+  schedule: [cron: '10 2 * * 2'] # run weekly Tuesday 02:10 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -74,4 +74,7 @@ jobs:
         run: |
           #ctest --test-dir build/debug
           #ctest --test-dir build/release
-          (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true

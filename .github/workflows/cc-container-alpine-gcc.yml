@@ -1,9 +1,9 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # DO NOT EDIT, GENERATED AUTOMATICALLY
-name: CC - GitHub all macOS 13
+name: CC - container Alpine gcc
 "on":
   schedule:
-    - cron: 10 2 * * 2
+    - cron: 05 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -16,35 +16,47 @@ env:
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:
-  CC:
+  gcc:
     if: github.repository_owner == 'upx'
-    runs-on: macos-13
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - cc: clang
-            cxx: clang++
-          - cc: gcc-11
-            cxx: g++-11
-          - cc: gcc-12
-            cxx: g++-12
-          - cc: gcc-13
-            cxx: g++-13
-          - cc: gcc-11 -static-libgcc
-            cxx: g++-11 -static-libgcc -static-libstdc++
-          - cc: gcc-12 -static-libgcc
-            cxx: g++-12 -static-libgcc -static-libstdc++
-          - cc: gcc-13 -static-libgcc
-            cxx: g++-13 -static-libgcc -static-libstdc++
+          - container: alpine:3.9
+          - container: alpine:3.10
+          - container: alpine:3.11
+          - container: alpine:3.12
+          - container: alpine:3.13
+          - container: alpine:3.14
+          - container: alpine:3.15
+          - container: alpine:3.16
+          - container: alpine:3.17
+          - container: alpine:3.18
+          - container: alpine:edge
+          - container: i386/alpine:3.9
+          - container: i386/alpine:3.10
+          - container: i386/alpine:3.11
+          - container: i386/alpine:3.12
+          - container: i386/alpine:3.13
+          - container: i386/alpine:3.14
+          - container: i386/alpine:3.15
+          - container: i386/alpine:3.16
+          - container: i386/alpine:3.17
+          - container: i386/alpine:3.18
+          - container: i386/alpine:edge
     env:
-      CC: ${{ matrix.cc }}
-      CXX: ${{ matrix.cxx }}
+      CC: gcc
+      CXX: g++
     steps:
       - name: Display environment
         run: |
           uname -a; pwd; id; umask
-          env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+          env | LC_ALL=C sort
+      - name: ${{ format('Install packages {0}', matrix.container) }}
+        run: |
+          apk update && apk upgrade && apk add cmake g++ git make
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config
@@ -65,9 +77,12 @@ jobs:
         run: make build/release
       - name: Run tests
         run: |
-          #ctest --test-dir build/debug
-          #ctest --test-dir build/release
+          # INFO: "ctest --test-dir DIR" only works on Alpine >= 3.14 (cmake-3.20.6)
+          (cd build/debug && ctest)
+          (cd build/release && ctest)
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
-            (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
+            apk add bash sudo
+            # IMPORTANT: do NOT run as user root!
+            (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
