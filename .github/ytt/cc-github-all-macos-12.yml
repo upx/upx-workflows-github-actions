@@ -28,8 +28,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-14.0.0
+          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-14.0.0 (Xcode-14.2)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
+          - { cc: 'clang-15', cxx: 'clang++-15' }
+####      - { cc: 'clang-16', cxx: 'clang++-16' }
 ####      - { cc: 'gcc-10', cxx: 'g++-10' }
           - { cc: 'gcc-11', cxx: 'g++-11' }
           - { cc: 'gcc-12', cxx: 'g++-12' }
@@ -49,6 +51,8 @@ jobs:
         run: |
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+      - run: brew list --versions
+        if: ${{ matrix.cc == 'clang' }} # only once per workflow
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
@@ -65,9 +69,21 @@ jobs:
           rev="$(git rev-parse HEAD)"
           echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
 
-      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+      - name: 'Update PATH'
+        if: ${{ startsWith(matrix.cc, 'clang-') }}
+        run: |
+          test -z "$HOMEBREW_PREFIX" && HOMEBREW_PREFIX=/usr/local
+          if test "$CC" = "clang-15"; then
+            echo "PATH=$HOMEBREW_PREFIX/opt/llvm@15/bin:$PATH" >> $GITHUB_ENV
+            echo "CXX=$HOMEBREW_PREFIX/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
+          elif test "$CC" = "clang-16"; then
+            echo "PATH=$HOMEBREW_PREFIX/opt/llvm@16/bin:$PATH" >> $GITHUB_ENV
+            echo "CXX=$HOMEBREW_PREFIX/opt/llvm@16/bin/clang++" >> $GITHUB_ENV
+          fi
+
+      - name: ${{ format('Build Debug with {0} and {1}', matrix.cc, matrix.cxx) }}
         run: 'make build/debug'
-      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+      - name: ${{ format('Build Release with {0} and {1}', matrix.cc, matrix.cxx) }}
         run: 'make build/release'
 
       - name: 'Run tests'
