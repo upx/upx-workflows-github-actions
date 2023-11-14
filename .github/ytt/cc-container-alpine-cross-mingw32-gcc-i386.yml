@@ -2,9 +2,9 @@
 #
 #
 
-name: 'CC - container Alpine mingw64-gcc'
+name: 'CC - container Alpine mingw32-gcc i386'
 "on":
-  schedule: [cron: '15 1 * * 2'] # run weekly Tuesday 01:15 UTC
+  schedule: [cron: '20 1 * * 2'] # run weekly Tuesday 01:20 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -20,7 +20,7 @@ env:
   REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
 
 jobs:
-  mingw64-gcc: # uses cmake + make
+  mingw32-gcc-i386: # uses cmake + make
     if: github.repository_owner == 'upx'
 
     runs-on: ubuntu-latest
@@ -29,20 +29,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { container: 'alpine:3.11' } # gcc-9.2    crt-6.0.0   needs CMAKE_AR
-          - { container: 'alpine:3.12' } # gcc-9.3    crt-7.0.0   needs CMAKE_AR
-          - { container: 'alpine:3.13' } # gcc-10.2   crt-8.0.0
-          - { container: 'alpine:3.14' } # gcc-10.3   crt-9.0.0
-          - { container: 'alpine:3.15' } # gcc-11.2   crt-9.0.0
-          - { container: 'alpine:3.16' } # gcc-11.3   ctr-10.0.0
-          - { container: 'alpine:3.17' } # gcc-12.2
-          - { container: 'alpine:3.18' } # gcc-12.2
-          - { container: 'alpine:edge' } # gcc-13.2
+          - { container: 'i386/alpine:3.11' } # gcc-9.2    crt-6.0.0    needs CMAKE_AR
+          - { container: 'i386/alpine:3.12' } # gcc-9.3    crt-7.0.0    needs CMAKE_AR
+          - { container: 'i386/alpine:3.13' } # gcc-10.2   crt-8.0.0
+          - { container: 'i386/alpine:3.14' } # gcc-10.3   ctr-9.0.0
+          - { container: 'i386/alpine:3.15' } # gcc-11.2   crt-9.0.0
+          - { container: 'i386/alpine:3.16' } # gcc-11.3   crt-10.0.0
+          - { container: 'i386/alpine:3.17' } # gcc-12.2
+          - { container: 'i386/alpine:3.18' } # gcc-12.2
+          - { container: 'i386/alpine:edge' } # gcc-13.2
 
     env:
-      CC: 'x86_64-w64-mingw32-gcc -static'
-      CXX: 'x86_64-w64-mingw32-g++ -static'
-      CMAKE_AR: '/usr/bin/x86_64-w64-mingw32-ar' # CMAKE_AR is only needed on Alpine 3.11 and 3.12
+      CC: 'i686-w64-mingw32-gcc -static'
+      CXX: 'i686-w64-mingw32-g++ -static'
+      CMAKE_AR: '/usr/bin/i686-w64-mingw32-ar' # CMAKE_AR is only needed on Alpine 3.11 and 3.12
 
     steps:
 

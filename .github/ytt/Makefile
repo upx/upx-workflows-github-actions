@@ -8,6 +8,7 @@ YTT     = ytt
 
 BUILT_FILES :=
 BUILT_FILES += ../workflows/cc-container-alpine-clang.yml
+BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw32-gcc-i386.yml
 BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw32-gcc.yml
 BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw64-gcc.yml
 BUILT_FILES += ../workflows/cc-container-alpine-gcc.yml

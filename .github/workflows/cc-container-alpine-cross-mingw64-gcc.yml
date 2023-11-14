@@ -24,6 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - container: alpine:3.11
+          - container: alpine:3.12
           - container: alpine:3.13
           - container: alpine:3.14
           - container: alpine:3.15
@@ -34,6 +36,7 @@ jobs:
     env:
       CC: x86_64-w64-mingw32-gcc -static
       CXX: x86_64-w64-mingw32-g++ -static
+      CMAKE_AR: /usr/bin/x86_64-w64-mingw32-ar
     steps:
       - name: Display environment
         run: |
