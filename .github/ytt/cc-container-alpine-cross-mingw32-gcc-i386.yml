@@ -34,12 +34,13 @@ jobs:
           - { container: 'i386/alpine:3.11' } # gcc-9.2    crt-6.0.0    needs CMAKE_AR
           - { container: 'i386/alpine:3.12' } # gcc-9.3    crt-7.0.0    needs CMAKE_AR
           - { container: 'i386/alpine:3.13' } # gcc-10.2   crt-8.0.0
-          - { container: 'i386/alpine:3.14' } # gcc-10.3   ctr-9.0.0
+          - { container: 'i386/alpine:3.14' } # gcc-10.3   crt-9.0.0
           - { container: 'i386/alpine:3.15' } # gcc-11.2   crt-9.0.0
           - { container: 'i386/alpine:3.16' } # gcc-11.3   crt-10.0.0
           - { container: 'i386/alpine:3.17' } # gcc-12.2
           - { container: 'i386/alpine:3.18' } # gcc-12.2
-          - { container: 'i386/alpine:edge' } # gcc-13.2
+          - { container: 'i386/alpine:3.19' } # gcc-13.2   crt-11.0.1
+          - { container: 'i386/alpine:edge' } # gcc-13.2   crt-11.0.1
 
     env:
       CC: 'i686-w64-mingw32-gcc -static'

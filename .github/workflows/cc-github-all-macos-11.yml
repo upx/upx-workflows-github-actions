@@ -29,8 +29,8 @@ jobs:
             cxx: clang++
           - cc: clang-15
             cxx: clang++-15
-          - cc: clang-16
-            cxx: clang++-16
+          - cc: clang-17
+            cxx: clang++-17
           - cc: gcc-10
             cxx: g++-10
           - cc: gcc-11
@@ -81,6 +81,9 @@ jobs:
           elif test "$CC" = "clang-16"; then
             echo "PATH=$HOMEBREW_PREFIX/opt/llvm@16/bin:$PATH" >> $GITHUB_ENV
             echo "CXX=$HOMEBREW_PREFIX/opt/llvm@16/bin/clang++" >> $GITHUB_ENV
+          elif test "$CC" = "clang-17"; then
+            echo "PATH=$HOMEBREW_PREFIX/opt/llvm@17/bin:$PATH" >> $GITHUB_ENV
+            echo "CXX=$HOMEBREW_PREFIX/opt/llvm@17/bin/clang++" >> $GITHUB_ENV
           fi
       - name: ${{ format('Build Debug with {0} and {1}', matrix.cc, matrix.cxx) }}
         run: make build/debug

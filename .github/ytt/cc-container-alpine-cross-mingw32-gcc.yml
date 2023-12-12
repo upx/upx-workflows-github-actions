@@ -31,8 +31,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { container: 'alpine:3.18' } # gcc-12.2
-          - { container: 'alpine:edge' } # gcc-13.2
+          - { container: 'alpine:3.18' } # i686-mingw-w64-gcc-12.2
+          - { container: 'alpine:3.19' } # i686-mingw-w64-gcc-13.2
+          - { container: 'alpine:edge' } # i686-mingw-w64-gcc-13.2
 
     env:
       CC: 'i686-w64-mingw32-gcc -static'

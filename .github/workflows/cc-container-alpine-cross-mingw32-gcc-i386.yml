@@ -34,6 +34,7 @@ jobs:
           - container: i386/alpine:3.16
           - container: i386/alpine:3.17
           - container: i386/alpine:3.18
+          - container: i386/alpine:3.19
           - container: i386/alpine:edge
     env:
       CC: i686-w64-mingw32-gcc -static
