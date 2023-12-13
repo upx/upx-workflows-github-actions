@@ -39,7 +39,7 @@ DEPS = $(MAKEFILE_LIST) | ../workflows/.
 	$(PYTHON3) $< | $(YTT) -f- | $(YQ) >> $@
 
 # directories
-%/. : ; @mkdir -v $(dir $@)
+%/. : ; @mkdir -p -v "$(patsubst %/,%,$(dir $@))"
 .PRECIOUS: %/.
 
 clean: PHONY

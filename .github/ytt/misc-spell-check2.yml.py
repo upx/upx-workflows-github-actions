@@ -56,7 +56,7 @@ jobs:
           echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
 
       - name: 'Spell check with crate-ci/typos'
-        uses: crate-ci/typos@c97d621b6b01d8b0258538ca15abeca5c5764601 # v1.16.23
+        uses: crate-ci/typos@5bd389de715c63ba86568420809e324fcea78660 # v1.16.25
         with: { config: ../Self/.github/typos_config_upx.toml }
 ''')
 
