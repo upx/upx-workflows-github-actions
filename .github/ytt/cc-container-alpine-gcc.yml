@@ -3,7 +3,7 @@
 #
 
 name: 'CC - container Alpine gcc'
-"on":
+'on':
   schedule: [cron: '05 1 * * 2'] # run weekly Tuesday 01:05 UTC
   workflow_dispatch: null
 env:
@@ -20,7 +20,7 @@ env:
   REMOTE_REF_TYPE: branch         # branch OR tag
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
-  REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
+  REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
   gcc: # uses cmake + make
@@ -35,7 +35,7 @@ jobs:
           - { container: 'alpine:3.9' }  # gcc-8.3
           - { container: 'alpine:3.10' } # gcc-8.3
           - { container: 'alpine:3.11' } # gcc-9.3
-          - { container: 'alpine:3.12' } # gcc-9.3
+          - { container: 'alpine:3.12' } # gcc-9.3            QEMU is broken
           - { container: 'alpine:3.13' } # gcc-10.2
           - { container: 'alpine:3.14' } # gcc-10.3
           - { container: 'alpine:3.15' } # gcc-10.3
@@ -48,7 +48,7 @@ jobs:
           - { container: 'i386/alpine:3.9' }  # gcc-8.3
           - { container: 'i386/alpine:3.10' } # gcc-8.3
           - { container: 'i386/alpine:3.11' } # gcc-9.3
-          - { container: 'i386/alpine:3.12' } # gcc-9.3
+          - { container: 'i386/alpine:3.12' } # gcc-9.3       QEMU is broken
           - { container: 'i386/alpine:3.13' } # gcc-10.2
           - { container: 'i386/alpine:3.14' } # gcc-10.3
           - { container: 'i386/alpine:3.15' } # gcc-10.3
@@ -102,5 +102,28 @@ jobs:
             apk add bash sudo
             # IMPORTANT: do NOT run as user root!
             (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true
+
+      - name: Mimic ctest tests
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            apk add bash
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+
+      - name: Mimic ctest tests QEMU
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            case ${{ matrix.container }} in
+              # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
+              *:3.12) echo "QEMU is broken -- tests skipped"; exit 0 ;;
+              i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
+              *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
+            esac
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
           true

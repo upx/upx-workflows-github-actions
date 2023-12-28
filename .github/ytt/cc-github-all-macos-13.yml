@@ -3,7 +3,7 @@
 # see https://github.com/actions/runner-images.git
 
 name: 'CC - GitHub all macOS 13'
-"on":
+'on':
   schedule: [cron: '10 2 * * 2'] # run weekly Tuesday 02:10 UTC
   workflow_dispatch: null
 env:
@@ -20,7 +20,7 @@ env:
   REMOTE_REF_TYPE: branch         # branch OR tag
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
-  REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
+  REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
   CC: # uses cmake + make

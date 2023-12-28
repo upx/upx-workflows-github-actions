@@ -91,3 +91,24 @@ jobs:
             (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
+      - name: Mimic ctest tests
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            apk add bash
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+      - name: Mimic ctest tests QEMU
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            case ${{ matrix.container }} in
+              # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
+              *:3.12) echo "QEMU is broken -- tests skipped"; exit 0 ;;
+              i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
+              *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
+            esac
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true

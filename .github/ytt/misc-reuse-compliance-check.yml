@@ -1,8 +1,9 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # see https://github.com/fsfe/reuse-action
+#
 
 name: 'Misc - REUSE Compliance Check'
-"on":
+'on':
 # schedule: [cron: '50 0 * * 3'] # run weekly Wednesday 00:50 UTC
   workflow_dispatch: null
 env:
@@ -13,7 +14,7 @@ env:
   REMOTE_REF_TYPE: branch         # branch OR tag
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
-  REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
+  REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
   job-reuse-compliance-check:

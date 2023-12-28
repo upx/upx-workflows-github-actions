@@ -3,7 +3,7 @@
 #
 
 name: 'CC - container Alpine mingw64-gcc'
-"on":
+'on':
   schedule: [cron: '15 1 * * 2'] # run weekly Tuesday 01:15 UTC
   workflow_dispatch: null
 env:
@@ -20,7 +20,7 @@ env:
   REMOTE_REF_TYPE: branch         # branch OR tag
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
-  REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
+  REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
   mingw64-gcc: # uses cmake + make

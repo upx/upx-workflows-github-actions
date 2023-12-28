@@ -28,15 +28,23 @@ define header
 	@echo '# DO NOT EDIT, GENERATED AUTOMATICALLY' >> $1
 endef
 
+define verify-yaml
+	@$(YTT) -f- < $1 > /dev/null
+	@$(YQ) < $1 > /dev/null
+endef
+
 DEPS = $(MAKEFILE_LIST) | ../workflows/.
 
 ../workflows/%.yml : %.yml $(DEPS)
+	$(call verify-yaml,$<)
 	$(call header,$@)
 	$(YTT) -f- < $< | $(YQ) >> $@
+	$(call verify-yaml,$@)
 
 ../workflows/%.yml : %.yml.py $(DEPS)
 	$(call header,$@)
 	$(PYTHON3) $< | $(YTT) -f- | $(YQ) >> $@
+	$(call verify-yaml,$@)
 
 # directories
 %/. : ; @mkdir -p -v "$(patsubst %/,%,$(dir $@))"
