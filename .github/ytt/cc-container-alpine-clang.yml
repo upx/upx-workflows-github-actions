@@ -36,7 +36,7 @@ jobs:
           # { container: 'alpine:3.9' }  # clang-5.0.2        BROKEN: test crashes; static-works
           - { container: 'alpine:3.10' } # clang-8.0.0
           - { container: 'alpine:3.11' } # clang-9.0.0
-          - { container: 'alpine:3.12' } # clang-10.0.0       QEMU is broken
+          - { container: 'alpine:3.12', skip_qemu: true } # clang-10.0.0       QEMU is broken
           - { container: 'alpine:3.13' } # clang-10.0.1
           - { container: 'alpine:3.14' } # clang-11.1.0
           - { container: 'alpine:3.15' } # clang-12.0.1
@@ -49,7 +49,7 @@ jobs:
           # { container: 'i386/alpine:3.9' }  # clang-5.0.2   BROKEN: build fails
           # { container: 'i386/alpine:3.10' } # clang-8.0.0   BROKEN: test crashes; static-works
           # { container: 'i386/alpine:3.11' } # clang-9.0.0   BROKEN: test crashes; static-works
-          - { container: 'i386/alpine:3.12' } # clang-10.0.0  QEMU is broken
+          - { container: 'i386/alpine:3.12', skip_qemu: true } # clang-10.0.0  QEMU is broken
           - { container: 'i386/alpine:3.13' } # clang-10.0.1
           - { container: 'i386/alpine:3.14' } # clang-11.1.0
           - { container: 'i386/alpine:3.15' } # clang-12.0.1
@@ -127,12 +127,12 @@ jobs:
           fi
           true
 
+      # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
       - name: Mimic ctest tests QEMU
+        if: ${{ !matrix.skip_qemu }}
         run: |
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             case ${{ matrix.container }} in
-              # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
-              *:3.12) echo "QEMU is broken -- tests skipped"; exit 0 ;;
               i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
               *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
             esac
