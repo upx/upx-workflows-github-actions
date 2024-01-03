@@ -15,7 +15,7 @@ yaml = MyTemplate(r'''
 # see https://github.com/crate-ci/typos
 
 name: 'Misc - Spell check 2'
-"on":
+'on':
 # schedule: [cron: '55 0 * * 3'] # run weekly Wednesday 00:55 UTC
   workflow_dispatch: null
 env:
@@ -26,7 +26,7 @@ env:
   REMOTE_REF_TYPE: branch         # branch OR tag
   REMOTE_REPOSITORY: upx/upx
   REMOTE_SERVER_URL: https://github.com
-  REMOTE_SHA: "0000000000000000000000000000000000000000" # will get updated below
+  REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
   job-spell-check:
@@ -56,7 +56,7 @@ jobs:
           echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
 
       - name: 'Spell check with crate-ci/typos'
-        uses: crate-ci/typos@45a880d9f898547e8bfe6525b6059d4b3dea4d71 # v1.16.26
+        uses: crate-ci/typos@2361394247a38536a5f2376a05181ca001dd9e26 # v1.17.0
         with: { config: ../Self/.github/typos_config_upx.toml }
 ''')
 

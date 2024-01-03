@@ -20,6 +20,7 @@ BUILT_FILES += ../workflows/cc-github-all-ubuntu-22.04.yml
 BUILT_FILES += ../workflows/misc-reuse-compliance-check.yml
 BUILT_FILES += ../workflows/misc-spell-check.yml
 BUILT_FILES += ../workflows/misc-spell-check2.yml
+BUILT_FILES += ../workflows/test-github-upload-artifact.yml
 
 default: PHONY $(BUILT_FILES)
 
@@ -28,7 +29,7 @@ define header
 	@echo '# DO NOT EDIT, GENERATED AUTOMATICALLY' >> $1
 endef
 
-define verify-yaml
+define check-yaml
 	@$(YTT) -f- < $1 > /dev/null
 	@$(YQ) < $1 > /dev/null
 endef
@@ -36,15 +37,15 @@ endef
 DEPS = $(MAKEFILE_LIST) | ../workflows/.
 
 ../workflows/%.yml : %.yml $(DEPS)
-	$(call verify-yaml,$<)
+	$(call check-yaml,$<)
 	$(call header,$@)
 	$(YTT) -f- < $< | $(YQ) >> $@
-	$(call verify-yaml,$@)
+	$(call check-yaml,$@)
 
 ../workflows/%.yml : %.yml.py $(DEPS)
 	$(call header,$@)
 	$(PYTHON3) $< | $(YTT) -f- | $(YQ) >> $@
-	$(call verify-yaml,$@)
+	$(call check-yaml,$@)
 
 # directories
 %/. : ; @mkdir -p -v "$(patsubst %/,%,$(dir $@))"

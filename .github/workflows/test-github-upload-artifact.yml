@@ -1,0 +1,294 @@
+# Copyright (C) Markus Franz Xaver Johannes Oberhumer
+# DO NOT EDIT, GENERATED AUTOMATICALLY
+name: Test GitHub @actions/upload-artifact
+"on":
+  workflow_dispatch: null
+env:
+  DEBIAN_FRONTEND: noninteractive
+jobs:
+  job-alpine_3_1:
+    container: alpine:3.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact alpine_3_1
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_1
+          path: test.txt
+  job-i386_alpine_3_1:
+    container: i386/alpine:3.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_alpine_3_1
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_1
+          path: test.txt
+  job-alpine_3_8:
+    container: alpine:3.8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact alpine_3_8
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_8
+          path: test.txt
+  job-i386_alpine_3_8:
+    container: i386/alpine:3.8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_alpine_3_8
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_8
+          path: test.txt
+  job-alpine_3_9:
+    container: alpine:3.9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact alpine_3_9
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_9
+          path: test.txt
+  job-i386_alpine_3_9:
+    container: i386/alpine:3.9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_alpine_3_9
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_9
+          path: test.txt
+  job-alpine_3_19:
+    container: alpine:3.19
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact alpine_3_19
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_19
+          path: test.txt
+  job-i386_alpine_3_19:
+    container: i386/alpine:3.19
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_alpine_3_19
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_19
+          path: test.txt
+  job-alpine_edge:
+    container: alpine:edge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact alpine_edge
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_edge
+          path: test.txt
+  job-i386_alpine_edge:
+    container: i386/alpine:edge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_alpine_edge
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_edge
+          path: test.txt
+  job-chimeralinux_chimera_latest:
+    container: chimeralinux/chimera:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact chimeralinux_chimera_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-chimeralinux_chimera_latest
+          path: test.txt
+  job-debian_10-slim:
+    container: debian:10-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact debian_10-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-debian_10-slim
+          path: test.txt
+  job-i386_debian_10-slim:
+    container: i386/debian:10-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_debian_10-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_debian_10-slim
+          path: test.txt
+  job-debian_11-slim:
+    container: debian:11-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact debian_11-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-debian_11-slim
+          path: test.txt
+  job-i386_debian_11-slim:
+    container: i386/debian:11-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_debian_11-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_debian_11-slim
+          path: test.txt
+  job-debian_12-slim:
+    container: debian:12-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact debian_12-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-debian_12-slim
+          path: test.txt
+  job-i386_debian_12-slim:
+    container: i386/debian:12-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact i386_debian_12-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_debian_12-slim
+          path: test.txt
+  job-opensuse_leap_latest:
+    container: opensuse/leap:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact opensuse_leap_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_latest
+          path: test.txt
+  job-opensuse_tumbleweed_latest:
+    container: opensuse/tumbleweed:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact opensuse_tumbleweed_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_tumbleweed_latest
+          path: test.txt
+  job-redhat_ubi8-minimal_latest:
+    container: redhat/ubi8-minimal:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact redhat_ubi8-minimal_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-redhat_ubi8-minimal_latest
+          path: test.txt
+  job-redhat_ubi8-micro_latest:
+    container: redhat/ubi8-micro:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact redhat_ubi8-micro_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-redhat_ubi8-micro_latest
+          path: test.txt
+  job-redhat_ubi9-minimal_latest:
+    container: redhat/ubi9-minimal:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact redhat_ubi9-minimal_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-redhat_ubi9-minimal_latest
+          path: test.txt
+  job-redhat_ubi9-micro_latest:
+    container: redhat/ubi9-micro:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact redhat_ubi9-micro_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-redhat_ubi9-micro_latest
+          path: test.txt
+  job-ubuntu_12_04:
+    container: ubuntu:12.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact ubuntu_12_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_12_04
+          path: test.txt
+  job-ubuntu_18_04:
+    container: ubuntu:18.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact ubuntu_18_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_18_04
+          path: test.txt
+  job-ubuntu_20_04:
+    container: ubuntu:20.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact ubuntu_20_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_20_04
+          path: test.txt
