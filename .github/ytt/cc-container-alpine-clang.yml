@@ -44,7 +44,7 @@ jobs:
           - { container: 'alpine:3.17' } # clang-15.0.7
           - { container: 'alpine:3.18' } # clang-16.0.6
           - { container: 'alpine:3.19' } # clang-17.0.5
-          - { container: 'alpine:edge' } # clang-17.0.5
+          - { container: 'alpine:edge' } # clang-17.0.6
           # 32-bit i386 versions
           # { container: 'i386/alpine:3.9' }  # clang-5.0.2   BROKEN: build fails
           # { container: 'i386/alpine:3.10' } # clang-8.0.0   BROKEN: test crashes; static-works
@@ -57,7 +57,7 @@ jobs:
           - { container: 'i386/alpine:3.17' } # clang-15.0.7
           - { container: 'i386/alpine:3.18' } # clang-16.0.6
           - { container: 'i386/alpine:3.19' } # clang-17.0.5
-          - { container: 'i386/alpine:edge' } # clang-17.0.5
+          - { container: 'i386/alpine:edge' } # clang-17.0.6
 
     env:
       CC: 'clang'
@@ -136,6 +136,17 @@ jobs:
               i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
               *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
             esac
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+
+      - name: Mimic ctest tests Valgrind
+        if: ${{ !matrix.skip_valgrind }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            apk add valgrind
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet"
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
