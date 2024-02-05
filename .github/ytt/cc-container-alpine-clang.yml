@@ -33,31 +33,34 @@ jobs:
       matrix:
         include:
           # info: "static-works" means that using "clang -static" should work
-          # { container: 'alpine:3.9' }  # clang-5.0.2        BROKEN: test crashes; static-works
-          - { container: 'alpine:3.10' } # clang-8.0.0
-          - { container: 'alpine:3.11' } # clang-9.0.0
-          - { container: 'alpine:3.12', skip_qemu: true } # clang-10.0.0       QEMU is broken
-          - { container: 'alpine:3.13' } # clang-10.0.1
-          - { container: 'alpine:3.14' } # clang-11.1.0
-          - { container: 'alpine:3.15' } # clang-12.0.1
-          - { container: 'alpine:3.16' } # clang-13.0.1
-          - { container: 'alpine:3.17' } # clang-15.0.7
-          - { container: 'alpine:3.18' } # clang-16.0.6
-          - { container: 'alpine:3.19' } # clang-17.0.5
-          - { container: 'alpine:edge' } # clang-17.0.5
+          # container: 'alpine:3.9'       # clang-5.0.2        BROKEN: test crashes; static-works
+          - container: 'alpine:3.10'      # clang-8.0.0
+          - container: 'alpine:3.11'      # clang-9.0.0
+          - container: 'alpine:3.12'      # clang-10.0.0
+            skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
+          - container: 'alpine:3.13'      # clang-10.0.1
+          - container: 'alpine:3.14'      # clang-11.1.0
+          - container: 'alpine:3.15'      # clang-12.0.1
+          - container: 'alpine:3.16'      # clang-13.0.1
+          - container: 'alpine:3.17'      # clang-15.0.7
+          - container: 'alpine:3.18'      # clang-16.0.6
+          - container: 'alpine:3.19'      # clang-17.0.5
+          - container: 'alpine:edge'      # clang-17.0.6
           # 32-bit i386 versions
-          # { container: 'i386/alpine:3.9' }  # clang-5.0.2   BROKEN: build fails
-          # { container: 'i386/alpine:3.10' } # clang-8.0.0   BROKEN: test crashes; static-works
-          # { container: 'i386/alpine:3.11' } # clang-9.0.0   BROKEN: test crashes; static-works
-          - { container: 'i386/alpine:3.12', skip_qemu: true } # clang-10.0.0  QEMU is broken
-          - { container: 'i386/alpine:3.13' } # clang-10.0.1
-          - { container: 'i386/alpine:3.14' } # clang-11.1.0
-          - { container: 'i386/alpine:3.15' } # clang-12.0.1
-          - { container: 'i386/alpine:3.16' } # clang-13.0.1
-          - { container: 'i386/alpine:3.17' } # clang-15.0.7
-          - { container: 'i386/alpine:3.18' } # clang-16.0.6
-          - { container: 'i386/alpine:3.19' } # clang-17.0.5
-          - { container: 'i386/alpine:edge' } # clang-17.0.5
+          # container: 'i386/alpine:3.9'  # clang-5.0.2   BROKEN: build fails
+          # container: 'i386/alpine:3.10' # clang-8.0.0   BROKEN: test crashes; static-works
+          # container: 'i386/alpine:3.11' # clang-9.0.0   BROKEN: test crashes; static-works
+          - container: 'i386/alpine:3.12' # clang-10.0.0
+            skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
+          - container: 'i386/alpine:3.13' # clang-10.0.1
+            skip_valgrind: true           #   std::unordered_set invalid delete in doctest check
+          - container: 'i386/alpine:3.14' # clang-11.1.0
+          - container: 'i386/alpine:3.15' # clang-12.0.1
+          - container: 'i386/alpine:3.16' # clang-13.0.1
+          - container: 'i386/alpine:3.17' # clang-15.0.7
+          - container: 'i386/alpine:3.18' # clang-16.0.6
+          - container: 'i386/alpine:3.19' # clang-17.0.5
+          - container: 'i386/alpine:edge' # clang-17.0.6
 
     env:
       CC: 'clang'
@@ -114,7 +117,7 @@ jobs:
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             apk add bash sudo
             # IMPORTANT: do NOT run as user root!
-            (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
+            (cd build/release && chmod a+w . && sudo -u guest bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
 
@@ -136,6 +139,17 @@ jobs:
               i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
               *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
             esac
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+
+      - name: Mimic ctest tests Valgrind
+        if: ${{ !matrix.skip_valgrind }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            apk add bash valgrind
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet"
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi

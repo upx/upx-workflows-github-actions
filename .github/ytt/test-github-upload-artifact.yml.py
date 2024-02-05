@@ -11,7 +11,7 @@ main_template = MyTemplate(r'''
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # see https://github.com/actions/upload-artifact
 
-# test upload-arifiact from various containers
+# test upload-artifact from various containers
 
 name: 'Test GitHub @actions/upload-artifact'
 'on':
@@ -60,7 +60,7 @@ containers = [
 
 jobs = ''
 for container in containers:
-    vars = { 
+    vars = {
         'container': container,
         'nice_name': re.sub(r'[^0-9a-zA-Z-]', '_', container),
     }

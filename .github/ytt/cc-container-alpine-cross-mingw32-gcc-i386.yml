@@ -81,9 +81,17 @@ jobs:
       - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
         run: 'make build/release'
 
-      - run: 'apk add wine && mkdir -p ~/.wine && wineboot --init'
-      - name: 'Run ctest tests Debug'
-        run: 'cd build/debug && ctest'
-      - name: 'Run ctest tests Release'
+      - run: apk add wine && mkdir -p ~/.wine && wineboot --init
+
+      - name: Run ctest tests Debug under Wine
+        run: cd build/debug && ctest
+      - name: Run ctest tests Release under Wine
         if: success() || failure() # run this step even if the previous step failed
-        run: 'cd build/release && ctest'
+        run: cd build/release && ctest
+
+      - name: Mimic ctest tests Debug under Wine
+        if: hashFiles('./misc/testsuite/mimic_ctest.sh') != ''
+        run: apk add bash && cd build/debug && upx_exe=./upx.exe bash ../../misc/testsuite/mimic_ctest.sh
+      - name: Mimic ctest tests Release under Wine
+        if: hashFiles('./misc/testsuite/mimic_ctest.sh') != ''
+        run: apk add bash && cd build/release && upx_exe=./upx.exe bash ../../misc/testsuite/mimic_ctest.sh

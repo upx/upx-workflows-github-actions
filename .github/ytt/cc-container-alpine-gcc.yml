@@ -32,31 +32,33 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { container: 'alpine:3.9' }  # gcc-8.3
-          - { container: 'alpine:3.10' } # gcc-8.3
-          - { container: 'alpine:3.11' } # gcc-9.3
-          - { container: 'alpine:3.12', skip_qemu: true } # gcc-9.3            QEMU is broken
-          - { container: 'alpine:3.13' } # gcc-10.2
-          - { container: 'alpine:3.14' } # gcc-10.3
-          - { container: 'alpine:3.15' } # gcc-10.3
-          - { container: 'alpine:3.16' } # gcc-11.2
-          - { container: 'alpine:3.17' } # gcc-12.2
-          - { container: 'alpine:3.18' } # gcc-12.2
-          - { container: 'alpine:3.19' } # gcc-13.2
-          - { container: 'alpine:edge' } # gcc-13.2
+          - container: 'alpine:3.9'       # gcc-8.3
+          - container: 'alpine:3.10'      # gcc-8.3
+          - container: 'alpine:3.11'      # gcc-9.3
+          - container: 'alpine:3.12'      # gcc-9.3
+            skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
+          - container: 'alpine:3.13'      # gcc-10.2
+          - container: 'alpine:3.14'      # gcc-10.3
+          - container: 'alpine:3.15'      # gcc-10.3
+          - container: 'alpine:3.16'      # gcc-11.2
+          - container: 'alpine:3.17'      # gcc-12.2
+          - container: 'alpine:3.18'      # gcc-12.2
+          - container: 'alpine:3.19'      # gcc-13.2
+          - container: 'alpine:edge'      # gcc-13.2
           # 32-bit i386 versions
-          - { container: 'i386/alpine:3.9' }  # gcc-8.3
-          - { container: 'i386/alpine:3.10' } # gcc-8.3
-          - { container: 'i386/alpine:3.11' } # gcc-9.3
-          - { container: 'i386/alpine:3.12' } # gcc-9.3       QEMU is broken
-          - { container: 'i386/alpine:3.13' } # gcc-10.2
-          - { container: 'i386/alpine:3.14' } # gcc-10.3
-          - { container: 'i386/alpine:3.15' } # gcc-10.3
-          - { container: 'i386/alpine:3.16' } # gcc-11.2
-          - { container: 'i386/alpine:3.17' } # gcc-12.2
-          - { container: 'i386/alpine:3.18' } # gcc-12.2
-          - { container: 'i386/alpine:3.19' } # gcc-13.2
-          - { container: 'i386/alpine:edge' } # gcc-13.2
+          - container: 'i386/alpine:3.9'  # gcc-8.3
+          - container: 'i386/alpine:3.10' # gcc-8.3
+          - container: 'i386/alpine:3.11' # gcc-9.3
+          - container: 'i386/alpine:3.12' # gcc-9.3
+            skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
+          - container: 'i386/alpine:3.13' # gcc-10.2
+          - container: 'i386/alpine:3.14' # gcc-10.3
+          - container: 'i386/alpine:3.15' # gcc-10.3
+          - container: 'i386/alpine:3.16' # gcc-11.2
+          - container: 'i386/alpine:3.17' # gcc-12.2
+          - container: 'i386/alpine:3.18' # gcc-12.2
+          - container: 'i386/alpine:3.19' # gcc-13.2
+          - container: 'i386/alpine:edge' # gcc-13.2
 
     env:
       CC: 'gcc'
@@ -101,7 +103,7 @@ jobs:
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             apk add bash sudo
             # IMPORTANT: do NOT run as user root!
-            (cd build/release && chmod a+w . && sudo -u operator bash ../../misc/testsuite/test_symlinks.sh)
+            (cd build/release && chmod a+w . && sudo -u guest bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
 
@@ -123,6 +125,17 @@ jobs:
               i386/*) apk add bash qemu-i386; export upx_exe_runner=qemu-i386 ;;
               *)      apk add bash qemu-x86_64; export upx_exe_runner=qemu-x86_64 ;;
             esac
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+
+      - name: Mimic ctest tests Valgrind
+        if: ${{ !matrix.skip_valgrind }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            apk add bash valgrind
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet"
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
