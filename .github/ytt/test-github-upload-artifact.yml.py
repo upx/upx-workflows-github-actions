@@ -30,7 +30,7 @@ job_template = MyTemplate(r'''
     steps:
       - name: 'Make artifact'
         run: 'echo TEST > test.txt'
-      - name: 'Upload artifact §{nice_name}'
+      - name: 'Upload artifact job-§{nice_name}'
         uses: actions/upload-artifact@v4
         with:
           name: 'job-§{nice_name}'
@@ -49,20 +49,27 @@ containers = [
     'debian:12-slim', 'i386/debian:12-slim',
     'opensuse/leap:latest',
     'opensuse/tumbleweed:latest',
-    'redhat/ubi8-minimal:latest',
-    'redhat/ubi8-micro:latest',
-    'redhat/ubi9-minimal:latest',
-    'redhat/ubi9-micro:latest',
+    'registry.access.redhat.com/ubi7/ubi-minimal',
+    'registry.access.redhat.com/ubi8/ubi-micro',
+    'registry.access.redhat.com/ubi8/ubi-minimal',
+    'registry.access.redhat.com/ubi9/ubi-micro',
+    'registry.access.redhat.com/ubi9/ubi-minimal',
     'ubuntu:12.04',
+    'ubuntu:14.04',
+    'ubuntu:16.04',
     'ubuntu:18.04',
     'ubuntu:20.04',
+    'ubuntu:22.04',
 ]
 
 jobs = ''
 for container in containers:
+    nice_name = container
+    nice_name = re.sub(r'^registry\.access\.redhat\.com/', '', nice_name)
+    nice_name = re.sub(r'[^0-9a-zA-Z-]', '_', nice_name)
     vars = {
         'container': container,
-        'nice_name': re.sub(r'[^0-9a-zA-Z-]', '_', container),
+        'nice_name': nice_name,
     }
     jobs += '  ' + job_template.substitute(vars).strip() + '\n'
 

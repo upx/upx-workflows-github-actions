@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact alpine_3_1
+      - name: Upload artifact job-alpine_3_1
         uses: actions/upload-artifact@v4
         with:
           name: job-alpine_3_1
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_alpine_3_1
+      - name: Upload artifact job-i386_alpine_3_1
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_alpine_3_1
@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact alpine_3_8
+      - name: Upload artifact job-alpine_3_8
         uses: actions/upload-artifact@v4
         with:
           name: job-alpine_3_8
@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_alpine_3_8
+      - name: Upload artifact job-i386_alpine_3_8
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_alpine_3_8
@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact alpine_3_9
+      - name: Upload artifact job-alpine_3_9
         uses: actions/upload-artifact@v4
         with:
           name: job-alpine_3_9
@@ -67,7 +67,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_alpine_3_9
+      - name: Upload artifact job-i386_alpine_3_9
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_alpine_3_9
@@ -78,7 +78,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact alpine_3_19
+      - name: Upload artifact job-alpine_3_19
         uses: actions/upload-artifact@v4
         with:
           name: job-alpine_3_19
@@ -89,7 +89,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_alpine_3_19
+      - name: Upload artifact job-i386_alpine_3_19
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_alpine_3_19
@@ -100,7 +100,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact alpine_edge
+      - name: Upload artifact job-alpine_edge
         uses: actions/upload-artifact@v4
         with:
           name: job-alpine_edge
@@ -111,7 +111,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_alpine_edge
+      - name: Upload artifact job-i386_alpine_edge
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_alpine_edge
@@ -122,7 +122,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact chimeralinux_chimera_latest
+      - name: Upload artifact job-chimeralinux_chimera_latest
         uses: actions/upload-artifact@v4
         with:
           name: job-chimeralinux_chimera_latest
@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact debian_10-slim
+      - name: Upload artifact job-debian_10-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-debian_10-slim
@@ -144,7 +144,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_debian_10-slim
+      - name: Upload artifact job-i386_debian_10-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_debian_10-slim
@@ -155,7 +155,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact debian_11-slim
+      - name: Upload artifact job-debian_11-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-debian_11-slim
@@ -166,7 +166,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_debian_11-slim
+      - name: Upload artifact job-i386_debian_11-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_debian_11-slim
@@ -177,7 +177,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact debian_12-slim
+      - name: Upload artifact job-debian_12-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-debian_12-slim
@@ -188,7 +188,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact i386_debian_12-slim
+      - name: Upload artifact job-i386_debian_12-slim
         uses: actions/upload-artifact@v4
         with:
           name: job-i386_debian_12-slim
@@ -199,7 +199,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact opensuse_leap_latest
+      - name: Upload artifact job-opensuse_leap_latest
         uses: actions/upload-artifact@v4
         with:
           name: job-opensuse_leap_latest
@@ -210,54 +210,65 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact opensuse_tumbleweed_latest
+      - name: Upload artifact job-opensuse_tumbleweed_latest
         uses: actions/upload-artifact@v4
         with:
           name: job-opensuse_tumbleweed_latest
           path: test.txt
-  job-redhat_ubi8-minimal_latest:
-    container: redhat/ubi8-minimal:latest
+  job-ubi7_ubi-minimal:
+    container: registry.access.redhat.com/ubi7/ubi-minimal
     runs-on: ubuntu-latest
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact redhat_ubi8-minimal_latest
+      - name: Upload artifact job-ubi7_ubi-minimal
         uses: actions/upload-artifact@v4
         with:
-          name: job-redhat_ubi8-minimal_latest
+          name: job-ubi7_ubi-minimal
           path: test.txt
-  job-redhat_ubi8-micro_latest:
-    container: redhat/ubi8-micro:latest
+  job-ubi8_ubi-micro:
+    container: registry.access.redhat.com/ubi8/ubi-micro
     runs-on: ubuntu-latest
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact redhat_ubi8-micro_latest
+      - name: Upload artifact job-ubi8_ubi-micro
         uses: actions/upload-artifact@v4
         with:
-          name: job-redhat_ubi8-micro_latest
+          name: job-ubi8_ubi-micro
           path: test.txt
-  job-redhat_ubi9-minimal_latest:
-    container: redhat/ubi9-minimal:latest
+  job-ubi8_ubi-minimal:
+    container: registry.access.redhat.com/ubi8/ubi-minimal
     runs-on: ubuntu-latest
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact redhat_ubi9-minimal_latest
+      - name: Upload artifact job-ubi8_ubi-minimal
         uses: actions/upload-artifact@v4
         with:
-          name: job-redhat_ubi9-minimal_latest
+          name: job-ubi8_ubi-minimal
           path: test.txt
-  job-redhat_ubi9-micro_latest:
-    container: redhat/ubi9-micro:latest
+  job-ubi9_ubi-micro:
+    container: registry.access.redhat.com/ubi9/ubi-micro
     runs-on: ubuntu-latest
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact redhat_ubi9-micro_latest
+      - name: Upload artifact job-ubi9_ubi-micro
         uses: actions/upload-artifact@v4
         with:
-          name: job-redhat_ubi9-micro_latest
+          name: job-ubi9_ubi-micro
+          path: test.txt
+  job-ubi9_ubi-minimal:
+    container: registry.access.redhat.com/ubi9/ubi-minimal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-ubi9_ubi-minimal
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubi9_ubi-minimal
           path: test.txt
   job-ubuntu_12_04:
     container: ubuntu:12.04
@@ -265,10 +276,32 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact ubuntu_12_04
+      - name: Upload artifact job-ubuntu_12_04
         uses: actions/upload-artifact@v4
         with:
           name: job-ubuntu_12_04
+          path: test.txt
+  job-ubuntu_14_04:
+    container: ubuntu:14.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-ubuntu_14_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_14_04
+          path: test.txt
+  job-ubuntu_16_04:
+    container: ubuntu:16.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-ubuntu_16_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_16_04
           path: test.txt
   job-ubuntu_18_04:
     container: ubuntu:18.04
@@ -276,7 +309,7 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact ubuntu_18_04
+      - name: Upload artifact job-ubuntu_18_04
         uses: actions/upload-artifact@v4
         with:
           name: job-ubuntu_18_04
@@ -287,8 +320,19 @@ jobs:
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact ubuntu_20_04
+      - name: Upload artifact job-ubuntu_20_04
         uses: actions/upload-artifact@v4
         with:
           name: job-ubuntu_20_04
+          path: test.txt
+  job-ubuntu_22_04:
+    container: ubuntu:22.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-ubuntu_22_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_22_04
           path: test.txt
