@@ -3,7 +3,7 @@
 name: CC - container Alpine mingw64-gcc
 "on":
   schedule:
-    - cron: 15 1 * * 2
+    - cron: 25 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"

@@ -2,9 +2,9 @@
 #
 #
 
-name: 'CC - container Alpine clang'
+name: 'CC - container Alpine clang-static'
 'on':
-  schedule: [cron: '00 1 * * 2'] # run weekly Tuesday 01:00 UTC
+  schedule: [cron: '05 1 * * 2'] # run weekly Tuesday 01:05 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'
@@ -32,12 +32,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # info: "static-works" means that using "clang -static" should work
-          # container: 'alpine:3.9'       # clang-5.0.2        BROKEN: test crashes; static-works
+          - container: 'alpine:3.9'       # clang-5.0.2
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
           - container: 'alpine:3.10'      # clang-8.0.0
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
           - container: 'alpine:3.11'      # clang-9.0.0
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
           - container: 'alpine:3.12'      # clang-10.0.0
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
           - container: 'alpine:3.13'      # clang-10.0.1
           - container: 'alpine:3.14'      # clang-11.1.0
           - container: 'alpine:3.15'      # clang-12.0.1
@@ -48,23 +51,25 @@ jobs:
           - container: 'alpine:edge'      # clang-17.0.6
           # 32-bit i386 versions
           # container: 'i386/alpine:3.9'  # clang-5.0.2   BROKEN: build fails
-          # container: 'i386/alpine:3.10' # clang-8.0.0   BROKEN: test crashes; static-works
-          # container: 'i386/alpine:3.11' # clang-9.0.0   BROKEN: test crashes; static-works
+          - container: 'i386/alpine:3.10' # clang-8.0.0
+          - container: 'i386/alpine:3.11' # clang-9.0.0
           - container: 'i386/alpine:3.12' # clang-10.0.0
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
           - container: 'i386/alpine:3.13' # clang-10.0.1
-            skip_valgrind: true           #   std::unordered_set invalid delete in doctest check
+          # skip_valgrind: true           #   std::unordered_set invalid delete in doctest check
           - container: 'i386/alpine:3.14' # clang-11.1.0
           - container: 'i386/alpine:3.15' # clang-12.0.1
           - container: 'i386/alpine:3.16' # clang-13.0.1
           - container: 'i386/alpine:3.17' # clang-15.0.7
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.18' # clang-16.0.6
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.19' # clang-17.0.5
           - container: 'i386/alpine:edge' # clang-17.0.6
 
     env:
-      CC: 'clang'
-      CXX: 'clang++'
+      CC: 'clang -static'
+      CXX: 'clang++ -static'
 
     steps:
 

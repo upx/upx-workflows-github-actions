@@ -1,9 +1,9 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # DO NOT EDIT, GENERATED AUTOMATICALLY
-name: CC - container Alpine gcc
+name: CC - container Alpine gcc-static
 "on":
   schedule:
-    - cron: 10 1 * * 2
+    - cron: 15 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -28,10 +28,14 @@ jobs:
       matrix:
         include:
           - container: alpine:3.9
+            skip_valgrind: true
           - container: alpine:3.10
+            skip_valgrind: true
           - container: alpine:3.11
+            skip_valgrind: true
           - container: alpine:3.12
             skip_qemu: true
+            skip_valgrind: true
           - container: alpine:3.13
           - container: alpine:3.14
           - container: alpine:3.15
@@ -41,21 +45,29 @@ jobs:
           - container: alpine:3.19
           - container: alpine:edge
           - container: i386/alpine:3.9
+            skip_valgrind: true
           - container: i386/alpine:3.10
+            skip_valgrind: true
           - container: i386/alpine:3.11
+            skip_valgrind: true
           - container: i386/alpine:3.12
             skip_qemu: true
+            skip_valgrind: true
           - container: i386/alpine:3.13
           - container: i386/alpine:3.14
           - container: i386/alpine:3.15
+            skip_valgrind: true
           - container: i386/alpine:3.16
+            skip_valgrind: true
           - container: i386/alpine:3.17
+            skip_valgrind: true
           - container: i386/alpine:3.18
+            skip_valgrind: true
           - container: i386/alpine:3.19
           - container: i386/alpine:edge
     env:
-      CC: gcc
-      CXX: g++
+      CC: gcc -static
+      CXX: g++ -static
     steps:
       - name: Display environment
         run: |

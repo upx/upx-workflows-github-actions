@@ -1,9 +1,9 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
 # DO NOT EDIT, GENERATED AUTOMATICALLY
-name: CC - container Alpine gcc
+name: CC - container Alpine clang-static
 "on":
   schedule:
-    - cron: 10 1 * * 2
+    - cron: 05 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -19,7 +19,7 @@ env:
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:
-  gcc:
+  clang:
     if: github.repository_owner == 'upx'
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
@@ -28,10 +28,14 @@ jobs:
       matrix:
         include:
           - container: alpine:3.9
+            skip_valgrind: true
           - container: alpine:3.10
+            skip_valgrind: true
           - container: alpine:3.11
+            skip_valgrind: true
           - container: alpine:3.12
             skip_qemu: true
+            skip_valgrind: true
           - container: alpine:3.13
           - container: alpine:3.14
           - container: alpine:3.15
@@ -40,7 +44,6 @@ jobs:
           - container: alpine:3.18
           - container: alpine:3.19
           - container: alpine:edge
-          - container: i386/alpine:3.9
           - container: i386/alpine:3.10
           - container: i386/alpine:3.11
           - container: i386/alpine:3.12
@@ -50,12 +53,14 @@ jobs:
           - container: i386/alpine:3.15
           - container: i386/alpine:3.16
           - container: i386/alpine:3.17
+            skip_valgrind: true
           - container: i386/alpine:3.18
+            skip_valgrind: true
           - container: i386/alpine:3.19
           - container: i386/alpine:edge
     env:
-      CC: gcc
-      CXX: g++
+      CC: clang -static
+      CXX: clang++ -static
     steps:
       - name: Display environment
         run: |
@@ -63,7 +68,19 @@ jobs:
           env | LC_ALL=C sort
       - name: ${{ format('Install packages {0}', matrix.container) }}
         run: |
-          apk update && apk upgrade && apk add cmake g++ git make
+          apk update && apk upgrade && apk add cmake clang git make
+          case ${{ matrix.container }} in
+            # g++ is needed on Alpine <= 3.18 because of missing dependencies
+            *:3.[0-9] | *:3.1[0-8]) apk add g++ ;;
+          esac
+          case ${{ matrix.container }} in
+            # clang-dev is needed on Alpine <= 3.11 for clang headers like <emmintrin.h>
+            *:3.[0-9] | *:3.1[0-1]) apk add clang-dev ;;
+          esac
+          case ${{ matrix.container }} in
+            # llvm-dev is needed on Alpine <= 3.18 for -flto (-flto only works on Alpine >= 3.15)
+            *:3.1[5-8]) apk add llvm-dev ;;
+          esac
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config

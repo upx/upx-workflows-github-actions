@@ -2,9 +2,9 @@
 #
 #
 
-name: 'CC - container Alpine clang'
+name: 'CC - container Alpine gcc-static'
 'on':
-  schedule: [cron: '00 1 * * 2'] # run weekly Tuesday 01:00 UTC
+  schedule: [cron: '15 1 * * 2'] # run weekly Tuesday 01:15 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'
@@ -23,7 +23,7 @@ env:
   REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
 jobs:
-  clang: # uses cmake + make
+  gcc: # uses cmake + make
     if: github.repository_owner == 'upx'
 
     runs-on: ubuntu-latest
@@ -32,39 +32,49 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # info: "static-works" means that using "clang -static" should work
-          # container: 'alpine:3.9'       # clang-5.0.2        BROKEN: test crashes; static-works
-          - container: 'alpine:3.10'      # clang-8.0.0
-          - container: 'alpine:3.11'      # clang-9.0.0
-          - container: 'alpine:3.12'      # clang-10.0.0
+          - container: 'alpine:3.9'       # gcc-8.3
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+          - container: 'alpine:3.10'      # gcc-8.3
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+          - container: 'alpine:3.11'      # gcc-9.3
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+          - container: 'alpine:3.12'      # gcc-9.3
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
-          - container: 'alpine:3.13'      # clang-10.0.1
-          - container: 'alpine:3.14'      # clang-11.1.0
-          - container: 'alpine:3.15'      # clang-12.0.1
-          - container: 'alpine:3.16'      # clang-13.0.1
-          - container: 'alpine:3.17'      # clang-15.0.7
-          - container: 'alpine:3.18'      # clang-16.0.6
-          - container: 'alpine:3.19'      # clang-17.0.5
-          - container: 'alpine:edge'      # clang-17.0.6
+            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+          - container: 'alpine:3.13'      # gcc-10.2
+          - container: 'alpine:3.14'      # gcc-10.3
+          - container: 'alpine:3.15'      # gcc-10.3
+          - container: 'alpine:3.16'      # gcc-11.2
+          - container: 'alpine:3.17'      # gcc-12.2
+          - container: 'alpine:3.18'      # gcc-12.2
+          - container: 'alpine:3.19'      # gcc-13.2
+          - container: 'alpine:edge'      # gcc-13.2
           # 32-bit i386 versions
-          # container: 'i386/alpine:3.9'  # clang-5.0.2   BROKEN: build fails
-          # container: 'i386/alpine:3.10' # clang-8.0.0   BROKEN: test crashes; static-works
-          # container: 'i386/alpine:3.11' # clang-9.0.0   BROKEN: test crashes; static-works
-          - container: 'i386/alpine:3.12' # clang-10.0.0
+          - container: 'i386/alpine:3.9'  # gcc-8.3
+            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.10' # gcc-8.3
+            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.11' # gcc-9.3
+            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.12' # gcc-9.3
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
-          - container: 'i386/alpine:3.13' # clang-10.0.1
-            skip_valgrind: true           #   std::unordered_set invalid delete in doctest check
-          - container: 'i386/alpine:3.14' # clang-11.1.0
-          - container: 'i386/alpine:3.15' # clang-12.0.1
-          - container: 'i386/alpine:3.16' # clang-13.0.1
-          - container: 'i386/alpine:3.17' # clang-15.0.7
-          - container: 'i386/alpine:3.18' # clang-16.0.6
-          - container: 'i386/alpine:3.19' # clang-17.0.5
-          - container: 'i386/alpine:edge' # clang-17.0.6
+            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.13' # gcc-10.2
+          - container: 'i386/alpine:3.14' # gcc-10.3
+          - container: 'i386/alpine:3.15' # gcc-10.3
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.16' # gcc-11.2
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.17' # gcc-12.2
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.18' # gcc-12.2
+            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
+          - container: 'i386/alpine:3.19' # gcc-13.2
+          - container: 'i386/alpine:edge' # gcc-13.2
 
     env:
-      CC: 'clang'
-      CXX: 'clang++'
+      CC: 'gcc -static'
+      CXX: 'g++ -static'
 
     steps:
 
@@ -75,19 +85,7 @@ jobs:
 
       - name: ${{ format('Install packages {0}', matrix.container) }}
         run: |
-          apk update && apk upgrade && apk add cmake clang git make
-          case ${{ matrix.container }} in
-            # g++ is needed on Alpine <= 3.18 because of missing dependencies
-            *:3.[0-9] | *:3.1[0-8]) apk add g++ ;;
-          esac
-          case ${{ matrix.container }} in
-            # clang-dev is needed on Alpine <= 3.11 for clang headers like <emmintrin.h>
-            *:3.[0-9] | *:3.1[0-1]) apk add clang-dev ;;
-          esac
-          case ${{ matrix.container }} in
-            # llvm-dev is needed on Alpine <= 3.18 for -flto (-flto only works on Alpine >= 3.15)
-            *:3.1[5-8]) apk add llvm-dev ;;
-          esac
+          apk update && apk upgrade && apk add cmake g++ git make
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
