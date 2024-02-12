@@ -154,7 +154,7 @@ jobs:
         run: |
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             apk add bash valgrind
-            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet"
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
