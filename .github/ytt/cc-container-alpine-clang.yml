@@ -130,7 +130,6 @@ jobs:
           fi
           true
 
-      # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
       - name: Mimic ctest tests QEMU
         if: ${{ !matrix.skip_qemu }}
         run: |

@@ -53,11 +53,10 @@ jobs:
           - container: i386/alpine:3.15
           - container: i386/alpine:3.16
           - container: i386/alpine:3.17
-            skip_valgrind: true
           - container: i386/alpine:3.18
-            skip_valgrind: true
           - container: i386/alpine:3.19
           - container: i386/alpine:edge
+            skip_qemu: true
     env:
       CC: clang -static
       CXX: clang++ -static
@@ -86,9 +85,9 @@ jobs:
           # git config
           git config --global core.autocrlf false
           git config --global --add safe.directory '*'
-          # install Self, needed for config file below
-          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
-
+          # install Self, needed for config file(s) below
+          git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+          # install repo
           git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
           test -f ./.gitmodules && git submodule update --init
           # TODO: handle REMOTE_REF_TYPE == "tag"
@@ -136,6 +135,10 @@ jobs:
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             apk add bash valgrind
             export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
+            #upx_exe_runner="$upx_exe_runner --show-error-list=yes" # only works on Alpine >= 3.10
+            for f in "$PWD"/misc/valgrind/musl.supp "$PWD"/../Self/.github/misc/valgrind/musl.supp; do
+              if test -f "$f"; then upx_exe_runner="$upx_exe_runner --suppressions=$f"; fi
+            done
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi

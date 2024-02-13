@@ -33,14 +33,14 @@ jobs:
       matrix:
         include:
           - container: 'alpine:3.9'       # gcc-8.3
-            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+            skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.10'      # gcc-8.3
-            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+            skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.11'      # gcc-9.3
-            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+            skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.12'      # gcc-9.3
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
-            skip_valgrind: true           #   musl strchr/strlen: Conditional jump or move depends on uninitialised value(s)
+            skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.13'      # gcc-10.2
           - container: 'alpine:3.14'      # gcc-10.3
           - container: 'alpine:3.15'      # gcc-10.3
@@ -51,26 +51,19 @@ jobs:
           - container: 'alpine:edge'      # gcc-13.2
           # 32-bit i386 versions
           - container: 'i386/alpine:3.9'  # gcc-8.3
-            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.10' # gcc-8.3
-            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.11' # gcc-9.3
-            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.12' # gcc-9.3
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
-            skip_valgrind: true           #   musl calloc: Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.13' # gcc-10.2
           - container: 'i386/alpine:3.14' # gcc-10.3
           - container: 'i386/alpine:3.15' # gcc-10.3
-            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.16' # gcc-11.2
-            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.17' # gcc-12.2
-            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.18' # gcc-12.2
-            skip_valgrind: true           #   musl enframe (meta.h): Conditional jump or move depends on uninitialised value(s)
           - container: 'i386/alpine:3.19' # gcc-13.2
           - container: 'i386/alpine:edge' # gcc-13.2
+            skip_qemu: true               #   qemu-i386-8.2.1-r0 is BROKEN on i386 !!
 
     env:
       CC: 'gcc -static'
@@ -92,9 +85,9 @@ jobs:
           # git config
           git config --global core.autocrlf false
           git config --global --add safe.directory '*'
-          # install Self, needed for config file below
-          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
-
+          # install Self, needed for config file(s) below
+          git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+          # install repo
           git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
           test -f ./.gitmodules && git submodule update --init
           # TODO: handle REMOTE_REF_TYPE == "tag"
@@ -128,7 +121,6 @@ jobs:
           fi
           true
 
-      # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
       - name: Mimic ctest tests QEMU
         if: ${{ !matrix.skip_qemu }}
         run: |
@@ -148,6 +140,10 @@ jobs:
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             apk add bash valgrind
             export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
+            #upx_exe_runner="$upx_exe_runner --show-error-list=yes" # only works on Alpine >= 3.10
+            for f in "$PWD"/misc/valgrind/musl.supp "$PWD"/../Self/.github/misc/valgrind/musl.supp; do
+              if test -f "$f"; then upx_exe_runner="$upx_exe_runner --suppressions=$f"; fi
+            done
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi

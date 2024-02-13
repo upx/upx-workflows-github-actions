@@ -59,6 +59,7 @@ jobs:
           - container: 'i386/alpine:3.18' # gcc-12.2
           - container: 'i386/alpine:3.19' # gcc-13.2
           - container: 'i386/alpine:edge' # gcc-13.2
+            skip_qemu: true               #   qemu-i386-8.2.1-r0 is BROKEN on i386 !!
 
     env:
       CC: 'gcc'
@@ -116,7 +117,6 @@ jobs:
           fi
           true
 
-      # qemu-5.0.0-r2 on Alpine 3.12 crashes on "./upx-packed.out --version-short" (both under i386 and x86_64)
       - name: Mimic ctest tests QEMU
         if: ${{ !matrix.skip_qemu }}
         run: |
