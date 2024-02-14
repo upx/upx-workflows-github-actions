@@ -17,6 +17,7 @@ BUILT_FILES += ../workflows/cc-container-alpine-gcc-static.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-11.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-12.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-13.yml
+BUILT_FILES += ../workflows/cc-github-all-macos-14.yml
 BUILT_FILES += ../workflows/cc-github-all-ubuntu-20.04.yml
 BUILT_FILES += ../workflows/cc-github-all-ubuntu-22.04.yml
 BUILT_FILES += ../workflows/misc-reuse-compliance-check.yml

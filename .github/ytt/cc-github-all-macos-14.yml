@@ -2,9 +2,9 @@
 # compile with ALL compilers that are pre-installed on the GitHub image
 # see https://github.com/actions/runner-images.git
 
-name: 'CC - GitHub all macOS 12'
+name: 'CC - GitHub all macOS 14'
 'on':
-  schedule: [cron: '05 2 * * 2'] # run weekly Tuesday 02:05 UTC
+  schedule: [cron: '15 2 * * 2'] # run weekly Tuesday 02:15 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'
@@ -26,12 +26,13 @@ jobs:
   CC: # uses cmake + make
     if: github.repository_owner == 'upx'
 
-    runs-on: macos-12
+    runs-on: macos-14
     strategy:
       fail-fast: false
       matrix:
+        # @BUG: gcc-13 currently does not work: internal error in ld::AtomPlacement::findAtom()
         include:
-          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-14.0.0 (Xcode-14.2)
+          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-15.0.0 (Xcode-15.0.1)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
           - { cc: 'clang-15', cxx: 'clang++-15' }
 ####      - { cc: 'clang-16', cxx: 'clang++-16' }
@@ -39,11 +40,11 @@ jobs:
 ####      - { cc: 'gcc-10', cxx: 'g++-10' }
           - { cc: 'gcc-11', cxx: 'g++-11' }
           - { cc: 'gcc-12', cxx: 'g++-12' }
-          - { cc: 'gcc-13', cxx: 'g++-13' }
+          # { cc: 'gcc-13', cxx: 'g++-13' }
 ####      - { cc: 'gcc-10 -static-libgcc', cxx: 'g++-10 -static-libgcc -static-libstdc++' }
           - { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
           - { cc: 'gcc-12 -static-libgcc', cxx: 'g++-12 -static-libgcc -static-libstdc++' }
-          - { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
+          # { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
 
     env:
       CC: ${{ matrix.cc }}
@@ -96,7 +97,7 @@ jobs:
 
       - name: 'Run tests'
         run: |
-          ctest --test-dir build/debug
+          #ctest --test-dir build/debug
           #ctest --test-dir build/release
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)

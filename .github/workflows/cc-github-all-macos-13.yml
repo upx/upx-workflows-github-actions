@@ -73,7 +73,8 @@ jobs:
       - name: Update PATH
         if: ${{ startsWith(matrix.cc, 'clang-') }}
         run: |
-          test -z "$HOMEBREW_PREFIX" && HOMEBREW_PREFIX=/usr/local
+          test -z "$HOMEBREW_PREFIX" && HOMEBREW_PREFIX="$(brew --prefix)"
+          echo "HOMEBREW_PREFIX=$HOMEBREW_PREFIX" >> $GITHUB_ENV
           if test "$CC" = "clang-15"; then
             echo "PATH=$HOMEBREW_PREFIX/opt/llvm@15/bin:$PATH" >> $GITHUB_ENV
             echo "CXX=$HOMEBREW_PREFIX/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
