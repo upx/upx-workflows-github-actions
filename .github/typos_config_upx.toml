@@ -23,6 +23,7 @@ tpos = "tpos"
 hda = "hda"
 Larg = "Larg"
 pard = "pard"
+shll = "shll"
 suble = "suble"
 
 # identifiers are intelligently split into words and then checked again
