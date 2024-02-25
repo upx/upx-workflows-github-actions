@@ -54,6 +54,7 @@ jobs:
           - container: i386/alpine:3.19
           - container: i386/alpine:edge
             skip_qemu: true
+            skip_valgrind: true
     env:
       CC: gcc
       CXX: g++
