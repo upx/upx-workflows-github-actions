@@ -44,4 +44,4 @@ jobs:
           echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
 
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v2
+        uses: fsfe/reuse-action@v3
