@@ -15,7 +15,7 @@ env:
   VERBOSE: 1
   REMOTE_REF_NAME: devel
   REMOTE_REF_TYPE: branch
-  REMOTE_REPOSITORY: upx/upx
+  REMOTE_REPOSITORY: upx/upx-workflows-github-weekly
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:

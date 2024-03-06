@@ -18,7 +18,7 @@ env:
   # these are exactly like the GITHUB_xxx default environment variables
   REMOTE_REF_NAME: devel
   REMOTE_REF_TYPE: branch         # branch OR tag
-  REMOTE_REPOSITORY: upx/upx
+  REMOTE_REPOSITORY: upx/upx-workflows-github-weekly
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: '0000000000000000000000000000000000000000' # will get updated below
 
