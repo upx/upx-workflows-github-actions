@@ -11,6 +11,7 @@ env:
   CTEST_OUTPUT_ON_FAILURE: "ON"
   DEBIAN_FRONTEND: noninteractive
   UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
+  UPX_CONFIG_DISABLE_SELF_PACK_TEST: "ON"
   UPX_CONFIG_EXPECT_THREADS: "ON"
   VERBOSE: 1
   REMOTE_REF_NAME: devel
@@ -91,8 +92,8 @@ jobs:
         run: make build/release
       - name: Run tests
         run: |
-          #ctest --test-dir build/debug
-          #ctest --test-dir build/release
+          ctest --test-dir build/debug
+          ctest --test-dir build/release
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
           fi

@@ -61,6 +61,7 @@ jobs:
           - container: 'i386/alpine:3.18' # clang-16.0.6
           - container: 'i386/alpine:3.19' # clang-17.0.5
           - container: 'i386/alpine:edge' # clang-17.0.6
+            skip_valgrind: true           #   TODO: valgrind aborts with "Illegal instruction"; check if both debug and release are affected; related to gcc problem??
 
     env:
       CC: 'clang'

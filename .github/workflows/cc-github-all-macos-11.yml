@@ -12,6 +12,7 @@ env:
   DEBIAN_FRONTEND: noninteractive
   UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
   UPX_CONFIG_EXPECT_THREADS: "ON"
+  UPX_DEBUG_FORCE_PACK_MACOS: 1
   VERBOSE: 1
   REMOTE_REF_NAME: devel
   REMOTE_REF_TYPE: branch
@@ -96,7 +97,7 @@ jobs:
       - name: Run tests
         run: |
           ctest --test-dir build/debug
-          #ctest --test-dir build/release
+          ctest --test-dir build/release
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             #(cd build/release && bash ../../misc/testsuite/test_symlinks.sh) # macos-11 lacks "readlink -f"
           fi

@@ -13,6 +13,7 @@ env:
   DEBIAN_FRONTEND: noninteractive
   UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
   UPX_CONFIG_EXPECT_THREADS: 'ON'
+  UPX_DEBUG_FORCE_PACK_MACOS: 1 # macos-11
   VERBOSE: 1
 
   # these are exactly like the GITHUB_xxx default environment variables
@@ -99,7 +100,7 @@ jobs:
       - name: 'Run tests'
         run: |
           ctest --test-dir build/debug
-          #ctest --test-dir build/release
+          ctest --test-dir build/release
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             #(cd build/release && bash ../../misc/testsuite/test_symlinks.sh) # macos-11 lacks "readlink -f"
           fi

@@ -64,6 +64,7 @@ jobs:
           - container: 'i386/alpine:3.19' # clang-17.0.5
           - container: 'i386/alpine:edge' # clang-17.0.6
             skip_qemu: true               #   qemu-i386-8.2.1-r0 is BROKEN on i386 !!
+            skip_valgrind: true           #   TODO: valgrind aborts with "Illegal instruction"; check if both debug and release are affected; related to qemu problem??
 
     env:
       CC: 'clang -static'
