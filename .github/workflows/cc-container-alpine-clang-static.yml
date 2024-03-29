@@ -56,8 +56,6 @@ jobs:
           - container: i386/alpine:3.18
           - container: i386/alpine:3.19
           - container: i386/alpine:edge
-            skip_qemu: true
-            skip_valgrind: true
     env:
       CC: clang -static
       CXX: clang++ -static
@@ -99,6 +97,12 @@ jobs:
         run: make build/debug
       - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
         run: make build/release
+      - name: Inspect binaries
+        run: |
+          apk add file
+          ls -l build/*/upx
+          size build/*/upx
+          file build/*/upx
       - name: Run tests
         run: |
           # INFO: "ctest --test-dir DIR" only works on Alpine >= 3.14 (cmake-3.20.6)
