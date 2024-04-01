@@ -14,6 +14,8 @@ env:
   UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
   UPX_CONFIG_DISABLE_SELF_PACK_TEST: 'ON' # macos-14
   UPX_CONFIG_EXPECT_THREADS: 'ON'
+  UPX_DEBUG_TEST_FLOAT_DIVISION_BY_ZERO: 1
+  UPX_DEBUG_TEST_LIBC_QSORT: 1
   VERBOSE: 1
 
   # these are exactly like the GITHUB_xxx default environment variables
