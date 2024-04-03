@@ -16,7 +16,7 @@ yaml = MyTemplate(r'''
 
 name: 'Misc - Spell check 2'
 'on':
-# schedule: [cron: '55 0 * * 3'] # run weekly Wednesday 00:55 UTC
+  #schedule: [cron: '55 0 * * 2'] # run weekly Tuesday 00:55 UTC
   workflow_dispatch: null
 env:
   DEBIAN_FRONTEND: noninteractive

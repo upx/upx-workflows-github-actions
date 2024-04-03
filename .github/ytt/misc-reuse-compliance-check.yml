@@ -4,7 +4,6 @@
 
 name: 'Misc - REUSE Compliance Check'
 'on':
-# schedule: [cron: '50 0 * * 3'] # run weekly Wednesday 00:50 UTC
   workflow_dispatch: null
 env:
   DEBIAN_FRONTEND: noninteractive
