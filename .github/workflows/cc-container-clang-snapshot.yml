@@ -2,6 +2,8 @@
 # DO NOT EDIT, GENERATED AUTOMATICALLY
 name: CC - container clang-snapshot
 "on":
+  schedule:
+    - cron: 10 1 * * 4
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
