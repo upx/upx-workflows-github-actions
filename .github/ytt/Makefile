@@ -1,4 +1,5 @@
 PYTHON3 = python3
+GOJQ    = gojq
 YQ      = yq
 YTT     = ytt
 
@@ -16,6 +17,7 @@ BUILT_FILES += ../workflows/cc-container-alpine-cross-mingw64-gcc.yml
 BUILT_FILES += ../workflows/cc-container-alpine-gcc.yml
 BUILT_FILES += ../workflows/cc-container-alpine-gcc-static.yml
 BUILT_FILES += ../workflows/cc-container-alpine-gcc-static-pie.yml
+BUILT_FILES += ../workflows/cc-container-clang-snapshot.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-11.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-12.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-13.yml
@@ -35,8 +37,9 @@ define header
 endef
 
 define check-yaml
-	@$(YTT) -f- < $1 > /dev/null
-	@$(YQ) < $1 > /dev/null
+	@$(GOJQ) --yaml-input < "$1" > /dev/null
+	@$(YTT) -f- < "$1" > /dev/null
+	@$(YQ) < "$1" > /dev/null
 endef
 
 DEPS = $(MAKEFILE_LIST) | ../workflows/.
