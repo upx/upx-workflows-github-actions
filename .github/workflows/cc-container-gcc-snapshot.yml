@@ -21,7 +21,7 @@ env:
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:
-  gcc:
+  gcc-14:
     if: github.repository_owner == 'upx'
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
@@ -71,7 +71,6 @@ jobs:
           file build/*/upx
       - name: Run tests
         run: |
-          # INFO: "ctest --test-dir DIR" only works on Alpine >= 3.14 (cmake-3.20.6)
           (cd build/debug && ctest)
           (cd build/release && ctest)
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
@@ -104,6 +103,73 @@ jobs:
         run: |
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+  gcc-latest-ubi:
+    if: github.repository_owner == 'upx'
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - container: registry.access.redhat.com/ubi8/ubi-minimal
+          - container: registry.access.redhat.com/ubi9/ubi-minimal
+    env:
+      CC: /opt/gcc-latest/bin/gcc -static-libstdc++
+      CXX: /opt/gcc-latest/bin/g++ -static-libstdc++
+    steps:
+      - name: Display environment
+        run: |
+          uname -a; pwd; id; umask
+          env | LC_ALL=C sort
+      - name: ${{ format('Install packages {0}', matrix.container) }}
+        run: |
+          if ! test -f /usr/bin/dnf; then microdnf update -y && microdnf install -y dnf; fi
+          dnf update -y && dnf install -y bash cmake dnf-plugins-core file git make tar
+          dnf copr -y enable jwakely/gcc-latest
+          dnf install -y gcc-latest glibc-devel
+          rpm -ql gcc-latest
+      - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
+        run: |
+          # git config
+          git config --global core.autocrlf false
+          git config --global --add safe.directory '*'
+          # install Self, needed for config file below
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+
+          git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
+          test -f ./.gitmodules && git submodule update --init
+          # TODO: handle REMOTE_REF_TYPE == "tag"
+          # update environment
+          rev="$(git rev-parse HEAD)"
+          echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
+      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/debug
+      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/release
+      - name: Inspect binaries
+        run: |
+          ls -l build/*/upx
+          size build/*/upx
+          file build/*/upx
+      - name: Run tests
+        run: |
+          (cd build/debug && ctest)
+          (cd build/release && ctest)
+          ls -l /usr/bin/env # package coreutils-single - this just a small shell script
+          ls -l /usr/bin/ls # package coreutils-single - this just a small shell script
+          if test -f XXXX./misc/testsuite/test_symlinks.sh; then true; # SKIP
+            dnf install -y sudo
+            # IMPORTANT: do NOT run as user root!
+            (cd build/release && chmod a+w . && sudo -u nobody bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true
+      - name: Mimic ctest tests
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
