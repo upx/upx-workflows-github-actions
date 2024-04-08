@@ -140,7 +140,7 @@ jobs:
           - container: 'registry.access.redhat.com/ubi9/ubi-minimal' # RHEL 9
 
     env:
-      CC: /opt/gcc-latest/bin/gcc -static-libstdc++
+      CC: /opt/gcc-latest/bin/gcc
       CXX: /opt/gcc-latest/bin/g++ -static-libstdc++
 
     steps:
@@ -188,9 +188,11 @@ jobs:
         run: |
           (cd build/debug && ctest)
           (cd build/release && ctest)
+          # TODO: allow overriding $test_file in test_symlinks.sh
+          ls -lrS /usr/bin
           ls -l /usr/bin/env # package coreutils-single - this just a small shell script
           ls -l /usr/bin/ls # package coreutils-single - this just a small shell script
-          if test -f XXXX./misc/testsuite/test_symlinks.sh; then true; # SKIP
+          if test -f XXXX./misc/testsuite/test_symlinks.sh; then true; # SKIP TODO
             dnf install -y sudo
             # IMPORTANT: do NOT run as user root!
             (cd build/release && chmod a+w . && sudo -u nobody bash ../../misc/testsuite/test_symlinks.sh)

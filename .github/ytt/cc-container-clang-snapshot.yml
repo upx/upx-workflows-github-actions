@@ -114,7 +114,6 @@ jobs:
 
       - name: 'Run tests'
         run: |
-          # INFO: "ctest --test-dir DIR" only works on Alpine >= 3.14 (cmake-3.20.6)
           (cd build/debug && ctest)
           (cd build/release && ctest)
           if test -f ./misc/testsuite/test_symlinks.sh; then true;

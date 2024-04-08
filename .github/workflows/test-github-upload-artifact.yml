@@ -336,3 +336,14 @@ jobs:
         with:
           name: job-ubuntu_22_04
           path: test.txt
+  job-ubuntu_24_04:
+    container: ubuntu:24.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-ubuntu_24_04
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-ubuntu_24_04
+          path: test.txt
