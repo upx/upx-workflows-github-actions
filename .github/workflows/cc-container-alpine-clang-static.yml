@@ -3,7 +3,7 @@
 name: CC - container Alpine clang-static
 "on":
   schedule:
-    - cron: 05 1 * * 2
+    - cron: 10 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"

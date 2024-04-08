@@ -3,7 +3,7 @@
 name: CC - container Alpine gcc-static-pie
 "on":
   schedule:
-    - cron: 17 1 * * 2
+    - cron: 50 1 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"

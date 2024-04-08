@@ -3,7 +3,7 @@
 name: CC - container gcc-snapshot
 "on":
   schedule:
-    - cron: 20 1 * * 4
+    - cron: 40 2 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
