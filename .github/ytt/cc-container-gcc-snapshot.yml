@@ -189,10 +189,7 @@ jobs:
           (cd build/debug && ctest)
           (cd build/release && ctest)
           # TODO: allow overriding $test_file in test_symlinks.sh
-          ls -lrS /usr/bin
-          ls -l /usr/bin/env # package coreutils-single - this just a small shell script
-          ls -l /usr/bin/ls # package coreutils-single - this just a small shell script
-          if test -f XXXX./misc/testsuite/test_symlinks.sh; then true; # SKIP TODO
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
             dnf install -y sudo
             # IMPORTANT: do NOT run as user root!
             (cd build/release && chmod a+w . && sudo -u nobody bash ../../misc/testsuite/test_symlinks.sh)
