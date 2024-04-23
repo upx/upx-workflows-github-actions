@@ -84,7 +84,7 @@ jobs:
           mkdir -p ../tmp && cd ../tmp
           curl -OL https://apt.llvm.org/llvm.sh
           bash ./llvm.sh ${{ matrix.llvm_major }}
-          $CC --version; $CXX --version
+      - run: $CC --version; $CXX --version
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |

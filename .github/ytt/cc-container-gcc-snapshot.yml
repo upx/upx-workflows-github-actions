@@ -53,7 +53,7 @@ jobs:
           apt-get update && apt-get upgrade -y
           apt-get install -y bash cmake curl file git make qemu-user valgrind
           apt-get install -y g++-14-multilib
-          $CC --version; $CXX --version
+      - run: $CC --version; $CXX --version
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
@@ -149,14 +149,16 @@ jobs:
         run: |
           uname -a; pwd; id; umask
           env | LC_ALL=C sort
+          rpm -qa | LC_ALL=C sort
 
       - name: ${{ format('Install packages {0}', matrix.container) }}
         run: |
           if ! test -f /usr/bin/dnf; then microdnf update -y && microdnf install -y dnf; fi
-          dnf update -y && dnf install -y bash cmake dnf-plugins-core file git make tar
+          dnf update -y && dnf install -y bash cmake diffutils dnf-plugins-core file git make tar
           dnf copr -y enable jwakely/gcc-latest
           dnf install -y gcc-latest glibc-devel
-          rpm -ql gcc-latest
+          #rpm -ql gcc-latest
+      - run: $CC --version; $CXX --version
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
