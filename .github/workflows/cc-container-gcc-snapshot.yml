@@ -42,7 +42,7 @@ jobs:
       - name: ${{ format('Install packages {0}', matrix.container) }}
         run: |
           apt-get update && apt-get upgrade -y
-          apt-get install -y bash cmake curl file git make qemu-user valgrind
+          apt-get install -y bash cmake file git make qemu-user valgrind
           apt-get install -y g++-14-multilib
       - run: $CC --version; $CXX --version
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
@@ -107,7 +107,7 @@ jobs:
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
           true
-  gcc-latest-ubi:
+  gcc-latest-rhel:
     if: github.repository_owner == 'upx'
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
@@ -115,8 +115,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - container: almalinux:8
+          - container: almalinux:9
+          - container: quay.io/centos/centos:centos7
+            is_rhel_7: true
+          - container: quay.io/centos/centos:stream8
+          - container: quay.io/centos/centos:stream9
+          - container: quay.io/centos/centos:stream9-minimal
+          - container: rockylinux:8
+          - container: rockylinux:9
           - container: registry.access.redhat.com/ubi8/ubi-minimal
+            skip_valgrind: true
           - container: registry.access.redhat.com/ubi9/ubi-minimal
+            skip_valgrind: true
     env:
       CC: /opt/gcc-latest/bin/gcc
       CXX: /opt/gcc-latest/bin/g++ -static-libstdc++
@@ -126,13 +137,26 @@ jobs:
           uname -a; pwd; id; umask
           env | LC_ALL=C sort
           rpm -qa | LC_ALL=C sort
-      - name: ${{ format('Install packages {0}', matrix.container) }}
+      - name: ${{ format('Install system packages {0}', matrix.container) }}
+        if: ${{ matrix.is_rhel_7 }}
+        run: |
+          yum update -y && yum install -y epel-release # for cmake3
+          yum install -y bash cmake3 diffutils file git make tar yum-plugin-copr
+          ln -s -v cmake3 /usr/bin/cmake
+          ln -s -v ctest3 /usr/bin/ctest
+          ln -s -v yum /usr/bin/dnf
+      - name: ${{ format('Install system packages {0}', matrix.container) }}
+        if: ${{ !matrix.is_rhel_7 }}
         run: |
           if ! test -f /usr/bin/dnf; then microdnf update -y && microdnf install -y dnf; fi
           dnf update -y && dnf install -y bash cmake diffutils dnf-plugins-core file git make tar
+      - name: Install gcc-latest
+        run: |
           dnf copr -y enable jwakely/gcc-latest
           dnf install -y gcc-latest glibc-devel
           #rpm -ql gcc-latest
+      - run: dnf install -y valgrind
+        if: ${{ !matrix.skip_valgrind }}
       - run: $CC --version; $CXX --version
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
@@ -171,6 +195,15 @@ jobs:
       - name: Mimic ctest tests
         run: |
           if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
+            (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
+          fi
+          true
+      - name: Mimic ctest tests Valgrind
+        if: ${{ !matrix.skip_valgrind }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
             (cd build/debug && bash ../../misc/testsuite/mimic_ctest.sh)
             (cd build/release && bash ../../misc/testsuite/mimic_ctest.sh)
           fi
