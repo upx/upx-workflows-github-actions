@@ -6,6 +6,28 @@ name: Test GitHub @actions/upload-artifact
 env:
   DEBIAN_FRONTEND: noninteractive
 jobs:
+  job-almalinux_8:
+    container: almalinux:8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-almalinux_8
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-almalinux_8
+          path: test.txt
+  job-almalinux_9:
+    container: almalinux:9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-almalinux_9
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-almalinux_9
+          path: test.txt
   job-alpine_3_1:
     container: alpine:3.1
     runs-on: ubuntu-latest
@@ -116,6 +138,61 @@ jobs:
         with:
           name: job-i386_alpine_edge
           path: test.txt
+  job-archlinux_latest:
+    container: archlinux:latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-archlinux_latest
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-archlinux_latest
+          path: test.txt
+  job-centos_centos7:
+    container: quay.io/centos/centos:centos7
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-centos_centos7
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-centos_centos7
+          path: test.txt
+  job-centos_stream8:
+    container: quay.io/centos/centos:stream8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-centos_stream8
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-centos_stream8
+          path: test.txt
+  job-centos_stream9:
+    container: quay.io/centos/centos:stream9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-centos_stream9
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-centos_stream9
+          path: test.txt
+  job-centos_stream9-minimal:
+    container: quay.io/centos/centos:stream9-minimal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-centos_stream9-minimal
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-centos_stream9-minimal
+          path: test.txt
   job-chimeralinux_chimera_latest:
     container: chimeralinux/chimera:latest
     runs-on: ubuntu-latest
@@ -193,6 +270,83 @@ jobs:
         with:
           name: job-i386_debian_12-slim
           path: test.txt
+  job-opensuse_leap_15_0:
+    container: opensuse/leap:15.0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_0
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_0
+          path: test.txt
+  job-opensuse_leap_15_1:
+    container: opensuse/leap:15.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_1
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_1
+          path: test.txt
+  job-opensuse_leap_15_2:
+    container: opensuse/leap:15.2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_2
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_2
+          path: test.txt
+  job-opensuse_leap_15_3:
+    container: opensuse/leap:15.3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_3
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_3
+          path: test.txt
+  job-opensuse_leap_15_4:
+    container: opensuse/leap:15.4
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_4
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_4
+          path: test.txt
+  job-opensuse_leap_15_5:
+    container: opensuse/leap:15.5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_5
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_5
+          path: test.txt
+  job-opensuse_leap_15_6:
+    container: opensuse/leap:15.6
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-opensuse_leap_15_6
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-opensuse_leap_15_6
+          path: test.txt
   job-opensuse_leap_latest:
     container: opensuse/leap:latest
     runs-on: ubuntu-latest
@@ -214,6 +368,28 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: job-opensuse_tumbleweed_latest
+          path: test.txt
+  job-rockylinux_8:
+    container: rockylinux:8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-rockylinux_8
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-rockylinux_8
+          path: test.txt
+  job-rockylinux_9:
+    container: rockylinux:9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-rockylinux_9
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-rockylinux_9
           path: test.txt
   job-ubi7_ubi-minimal:
     container: registry.access.redhat.com/ubi7/ubi-minimal
