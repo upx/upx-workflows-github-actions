@@ -113,7 +113,7 @@ jobs:
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             apk add bash sudo
             # IMPORTANT: do NOT run as user root!
-            (cd build/release && chmod a+w . && sudo -u guest bash ../../misc/testsuite/test_symlinks.sh)
+            (cd build/release && chmod a+w . && sudo -u nobody bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
       - name: Mimic ctest tests
