@@ -50,7 +50,7 @@ jobs:
       CXX: 'x86_64-w64-mingw32-g++ -static'
       CMAKE_AR: '/usr/bin/x86_64-w64-mingw32-ar' # CMAKE_AR is only needed on Alpine 3.11 and 3.12
       CMAKE_SYSTEM_NAME: Windows
-      CMAKE_CROSSCOMPILING_EMULATOR: wine64
+      CMAKE_CROSSCOMPILING_EMULATOR: wine
 
     steps:
 
@@ -83,13 +83,15 @@ jobs:
       - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
         run: 'make build/release'
 
-      - run: apk add wine && mkdir -p ~/.wine && wineboot --init
+      - run: |
+          apk add wine && mkdir -p ~/.wine && wineboot --init
+          test -f /usr/bin/wine || ln -s -v wine64 /usr/bin/wine # needed for Alpine < 3.18
 
       - name: Run ctest tests Debug under Wine
-        run: cd build/debug && ctest
+        run: make build/debug+test
       - name: Run ctest tests Release under Wine
         if: success() || failure() # run this step even if the previous step failed
-        run: cd build/release && ctest
+        run: make build/release+test
 
       - name: Mimic ctest tests Debug under Wine
         if: hashFiles('./misc/testsuite/mimic_ctest.sh') != ''

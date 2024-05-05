@@ -114,8 +114,8 @@ jobs:
 
       - name: 'Run tests'
         run: |
-          (cd build/debug && ctest)
-          (cd build/release && ctest)
+          make build/debug+test
+          make build/release+test
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             apt-get install -y sudo
             # IMPORTANT: do NOT run as user root!

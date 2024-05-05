@@ -73,10 +73,10 @@ jobs:
         run: make build/release
       - run: apk add wine && mkdir -p ~/.wine && wineboot --init
       - name: Run ctest tests Debug under Wine
-        run: cd build/debug && ctest
+        run: make build/debug+test
       - name: Run ctest tests Release under Wine
         if: success() || failure()
-        run: cd build/release && ctest
+        run: make build/release+test
       - name: Mimic ctest tests Debug under Wine
         if: hashFiles('./misc/testsuite/mimic_ctest.sh') != ''
         run: apk add bash && cd build/debug && upx_exe=./upx.exe bash ../../misc/testsuite/mimic_ctest.sh

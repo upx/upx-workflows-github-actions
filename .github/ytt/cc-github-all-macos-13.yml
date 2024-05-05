@@ -105,8 +105,8 @@ jobs:
 
       - name: 'Run tests'
         run: |
-          ctest --test-dir build/debug
-          ctest --test-dir build/release
+          ctest --test-dir build/debug   --parallel ${CTEST_JOBS:-8}
+          ctest --test-dir build/release --parallel ${CTEST_JOBS:-8}
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
             (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
           fi
