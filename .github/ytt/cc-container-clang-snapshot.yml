@@ -117,7 +117,7 @@ jobs:
 
       - name: Analyze clang-tidy
         if: ${{ !matrix.skip_clang_tidy }}
-        run: make -k build/analyze/clang-tidy/all CLANG_TIDY_BUILD_BASE=build CC="$CC" CXX="$CXX" || true
+        run: make -k build/analyze/clang-tidy/all CLANG_TIDY_BUILD_BASE=build CC="$CC" CXX="$CXX"
 
       - name: Inspect binaries
         run: |
