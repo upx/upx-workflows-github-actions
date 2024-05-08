@@ -270,6 +270,39 @@ jobs:
         with:
           name: job-i386_debian_12-slim
           path: test.txt
+  job-fedora_30:
+    container: fedora:30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-fedora_30
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-fedora_30
+          path: test.txt
+  job-fedora_40:
+    container: fedora:40
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-fedora_40
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-fedora_40
+          path: test.txt
+  job-fedora_rawhide:
+    container: fedora:rawhide
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-fedora_rawhide
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-fedora_rawhide
+          path: test.txt
   job-opensuse_leap_15_0:
     container: opensuse/leap:15.0
     runs-on: ubuntu-latest

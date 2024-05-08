@@ -60,6 +60,10 @@ containers = [
     'debian:10-slim', 'i386/debian:10-slim',
     'debian:11-slim', 'i386/debian:11-slim',
     'debian:12-slim', 'i386/debian:12-slim',
+    # Fedora Linux
+    'fedora:30',
+    'fedora:40',
+    'fedora:rawhide',
     # openSUSE
     'opensuse/leap:15.0',
     'opensuse/leap:15.1',
