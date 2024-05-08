@@ -22,7 +22,7 @@ env:
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:
   gcc-14:
-    if: github.repository_owner == 'upx'
+    if: false
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
     strategy:

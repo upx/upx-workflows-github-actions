@@ -26,7 +26,8 @@ env:
 
 jobs:
   gcc-14: # uses cmake + make
-    if: github.repository_owner == 'upx'
+    if: false # wait for gcc-15 availability
+#   if: github.repository_owner == 'upx'
 
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
