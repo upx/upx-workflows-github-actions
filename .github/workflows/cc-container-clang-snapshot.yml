@@ -71,6 +71,7 @@ jobs:
           apt-get update && apt-get upgrade -y
           apt-get install -y bash cmake curl file git make parallel qemu-user time valgrind
           apt-get install -y gnupg lsb-release software-properties-common wget
+          mkdir -p ~/.parallel && : > ~/.parallel/$(echo 6305-4721 | tr 0-7 leticlwi)
       - name: ${{ format('Install llvm-{0}', matrix.llvm_major) }}
         run: |
           mkdir -p ../tmp && cd ../tmp
@@ -96,11 +97,6 @@ jobs:
         run: make build/debug
       - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
         run: make build/release
-      - name: Analyze clang-analyzer
-        run: make build/analyze/clang-analyzer/all SCAN_BUILD="$SCAN_BUILD" CCC_CC="$CC" CCC_CXX="$CXX"
-      - name: Analyze clang-tidy
-        if: ${{ !matrix.skip_clang_tidy }}
-        run: make -k build/analyze/clang-tidy/all CLANG_TIDY_BUILD_BASE=build CC="$CC" CXX="$CXX"
       - name: Inspect binaries
         run: |
           ls -l build/*/upx
@@ -147,3 +143,8 @@ jobs:
             parallel -kv --lb 'cd build/{} && bash ../../misc/testsuite/mimic_ctest.sh' ::: $jobs
           fi
           true
+      - name: Analyze clang-analyzer
+        run: make build/analyze/clang-analyzer/all SCAN_BUILD="$SCAN_BUILD" CCC_CC="$CC" CCC_CXX="$CXX"
+      - name: Analyze clang-tidy
+        if: ${{ !matrix.skip_clang_tidy }}
+        run: make -k build/analyze/clang-tidy/all CLANG_TIDY_BUILD_BASE=build CC="$CC" CXX="$CXX"

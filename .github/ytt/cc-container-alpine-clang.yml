@@ -35,7 +35,7 @@ jobs:
       matrix:
         include:
           # info: "static-works" means that using "clang -static" should work
-          # container: 'alpine:3.9'       # clang-5.0.2        BROKEN: test crashes; static-works
+          - container: 'alpine:3.9'       # clang-5.0.2
           - container: 'alpine:3.10'      # clang-8.0.0
           - container: 'alpine:3.11'      # clang-9.0.0
           - container: 'alpine:3.12'      # clang-10.0.0
