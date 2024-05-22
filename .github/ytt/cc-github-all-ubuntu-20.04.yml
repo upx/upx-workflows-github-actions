@@ -50,12 +50,12 @@ jobs:
 
     steps:
 
-      - name: 'Display environment'
+      - name: Display environment
         run: |
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
+      - run: $CC --version; $CXX --version
       - run: dpkg -l
-        if: ${{ matrix.cc == 'gcc' }} # only once per workflow
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
@@ -77,7 +77,13 @@ jobs:
       - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
         run: 'make build/release'
 
-      - name: 'Run tests'
+      - name: Inspect binaries
+        run: |
+            ls -l build/*/upx
+            size build/*/upx
+            file build/*/upx
+
+      - name: Run ctest tests
         run: |
           ctest --test-dir build/debug   --parallel ${CTEST_JOBS:-8}
           ctest --test-dir build/release --parallel ${CTEST_JOBS:-8}
