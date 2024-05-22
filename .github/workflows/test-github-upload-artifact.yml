@@ -116,6 +116,28 @@ jobs:
         with:
           name: job-i386_alpine_3_19
           path: test.txt
+  job-alpine_3_20:
+    container: alpine:3.20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-alpine_3_20
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_20
+          path: test.txt
+  job-i386_alpine_3_20:
+    container: i386/alpine:3.20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-i386_alpine_3_20
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_20
+          path: test.txt
   job-alpine_edge:
     container: alpine:edge
     runs-on: ubuntu-latest

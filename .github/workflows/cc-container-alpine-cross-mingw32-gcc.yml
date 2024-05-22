@@ -31,6 +31,7 @@ jobs:
         include:
           - container: alpine:3.18
           - container: alpine:3.19
+          - container: alpine:3.20
           - container: alpine:edge
     env:
       CC: i686-w64-mingw32-gcc -static

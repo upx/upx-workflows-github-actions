@@ -45,6 +45,7 @@ jobs:
           - container: alpine:3.17
           - container: alpine:3.18
           - container: alpine:3.19
+          - container: alpine:3.20
           - container: alpine:edge
           - container: i386/alpine:3.10
           - container: i386/alpine:3.11
@@ -57,6 +58,7 @@ jobs:
           - container: i386/alpine:3.17
           - container: i386/alpine:3.18
           - container: i386/alpine:3.19
+          - container: i386/alpine:3.20
           - container: i386/alpine:edge
     env:
       CC: clang -static
