@@ -91,7 +91,7 @@ jobs:
           bash ./llvm.sh ${{ matrix.llvm_major }} all
           ln -s -v ../../bin/clang-tidy-${{ matrix.llvm_major }} /usr/local/bin/clang-tidy
 
-      - run: $CC --version; $CXX --version
+      - run: set -x; $CC --version; $CXX --version
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |

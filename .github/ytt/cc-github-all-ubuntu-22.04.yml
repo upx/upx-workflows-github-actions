@@ -56,7 +56,7 @@ jobs:
         run: |
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
-      - run: $CC --version; $CXX --version
+      - run: set -x; $CC --version; $CXX --version
       - run: dpkg -l
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}

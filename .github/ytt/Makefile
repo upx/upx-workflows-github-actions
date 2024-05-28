@@ -1,7 +1,7 @@
 PYTHON3 = python3
-GOJQ    = gojq
-YQ      = yq
-YTT     = ytt
+GOJQ    = gojq-0.12.15
+YQ      = yq-4.44.1
+YTT     = ytt-0.49.0
 
 .PHONY: PHONY
 .SECONDEXPANSION:

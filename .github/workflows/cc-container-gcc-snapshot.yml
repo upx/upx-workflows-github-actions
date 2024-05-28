@@ -45,7 +45,7 @@ jobs:
           apt-get install -y bash cmake file git make parallel qemu-user valgrind
           apt-get install -y g++-14-multilib
           mkdir -p ~/.parallel && : > ~/.parallel/$(echo 6305-4721 | tr 0-7 leticlwi)
-      - run: $CC --version; $CXX --version
+      - run: set -x; $CC --version; $CXX --version
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config
@@ -162,7 +162,7 @@ jobs:
           #rpm -ql gcc-latest
       - run: dnf install -y valgrind
         if: ${{ !matrix.skip_valgrind }}
-      - run: $CC --version; $CXX --version
+      - run: set -x; $CC --version; $CXX --version
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config
