@@ -38,7 +38,7 @@ job_template = MyTemplate(r'''
 ''')
 
 containers = [
-    # Alma Linux
+    # Alma Linux (RHEL)
     'almalinux:8',
     'almalinux:9',
     # Alpine Linux
@@ -47,24 +47,26 @@ containers = [
     'alpine:3.9', 'i386/alpine:3.9',
     'alpine:3.19', 'i386/alpine:3.19',
     'alpine:3.20', 'i386/alpine:3.20',
-    'alpine:edge', 'i386/alpine:edge',
+    'alpine:edge', 'i386/alpine:edge', # rolling
     # Arch Linux
-    'archlinux:latest',
-    # CentOS
+    'archlinux:latest', # rolling
+    # CentOS (RHEL)
     'quay.io/centos/centos:centos7',
     'quay.io/centos/centos:stream8',
     'quay.io/centos/centos:stream9',
     'quay.io/centos/centos:stream9-minimal',
     # Chimera Linux
-    'chimeralinux/chimera:latest',
+    'chimeralinux/chimera:latest', # rolling
     # Debian Linux
     'debian:10-slim', 'i386/debian:10-slim',
     'debian:11-slim', 'i386/debian:11-slim',
     'debian:12-slim', 'i386/debian:12-slim',
+    'debian:testing-slim',  'i386/debian:testing-slim',  # rolling
+    'debian:unstable-slim', 'i386/debian:unstable-slim', # rolling
     # Fedora Linux
     'fedora:30',
     'fedora:40',
-    'fedora:rawhide',
+    'fedora:rawhide', # rolling
     # openSUSE
     'opensuse/leap:15.0',
     'opensuse/leap:15.1',
@@ -74,11 +76,11 @@ containers = [
     'opensuse/leap:15.5',
     'opensuse/leap:15.6',
     'opensuse/leap:latest',
-    'opensuse/tumbleweed:latest',
-    # Rocky Linux
+    'opensuse/tumbleweed:latest', # rolling
+    # Rocky Linux (RHEL)
     'rockylinux:8',
     'rockylinux:9',
-    # UBI RedHat
+    # UBI RedHat (RHEL)
     'registry.access.redhat.com/ubi7/ubi-minimal',
     'registry.access.redhat.com/ubi8/ubi-micro',
     'registry.access.redhat.com/ubi8/ubi-minimal',
@@ -92,11 +94,15 @@ containers = [
     'ubuntu:20.04',
     'ubuntu:22.04',
     'ubuntu:24.04',
+    # Void Linux
+    'ghcr.io/void-linux/void-glibc', # rolling
+    'ghcr.io/void-linux/void-musl',  # rolling
 ]
 
 jobs = ''
 for container in containers:
     nice_name = container
+    nice_name = re.sub(r'^ghcr\.io/', '', nice_name)
     nice_name = re.sub(r'^quay\.io/centos/', '', nice_name)
     nice_name = re.sub(r'^registry\.access\.redhat\.com/', '', nice_name)
     nice_name = re.sub(r'[^0-9a-zA-Z-]', '_', nice_name)

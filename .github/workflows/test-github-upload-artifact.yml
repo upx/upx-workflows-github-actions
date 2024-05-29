@@ -292,6 +292,50 @@ jobs:
         with:
           name: job-i386_debian_12-slim
           path: test.txt
+  job-debian_testing-slim:
+    container: debian:testing-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-debian_testing-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-debian_testing-slim
+          path: test.txt
+  job-i386_debian_testing-slim:
+    container: i386/debian:testing-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-i386_debian_testing-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_debian_testing-slim
+          path: test.txt
+  job-debian_unstable-slim:
+    container: debian:unstable-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-debian_unstable-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-debian_unstable-slim
+          path: test.txt
+  job-i386_debian_unstable-slim:
+    container: i386/debian:unstable-slim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-i386_debian_unstable-slim
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_debian_unstable-slim
+          path: test.txt
   job-fedora_30:
     container: fedora:30
     runs-on: ubuntu-latest
@@ -577,4 +621,26 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: job-ubuntu_24_04
+          path: test.txt
+  job-void-linux_void-glibc:
+    container: ghcr.io/void-linux/void-glibc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-void-linux_void-glibc
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-void-linux_void-glibc
+          path: test.txt
+  job-void-linux_void-musl:
+    container: ghcr.io/void-linux/void-musl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-void-linux_void-musl
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-void-linux_void-musl
           path: test.txt
