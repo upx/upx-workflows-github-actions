@@ -33,7 +33,6 @@ jobs:
           - container: almalinux:9
           - container: quay.io/centos/centos:centos7
             is_rhel_7: true
-          - container: quay.io/centos/centos:stream8
           - container: quay.io/centos/centos:stream9
           - container: quay.io/centos/centos:stream9-minimal
           - container: rockylinux:8
