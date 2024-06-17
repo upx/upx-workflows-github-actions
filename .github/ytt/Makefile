@@ -20,7 +20,6 @@ BUILT_FILES += ../workflows/cc-container-alpine-gcc-static-pie.yml
 BUILT_FILES += ../workflows/cc-container-clang-snapshot.yml
 BUILT_FILES += ../workflows/cc-container-gcc-snapshot.yml
 BUILT_FILES += ../workflows/cc-container-rhel-cygwin.yml
-BUILT_FILES += ../workflows/cc-github-all-macos-11.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-12.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-13.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-14.yml
