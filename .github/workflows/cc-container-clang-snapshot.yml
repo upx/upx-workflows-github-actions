@@ -50,11 +50,11 @@ jobs:
           - container: ubuntu:22.04
             llvm_major: 19
             skip_valgrind: true
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 17
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 18
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 19
     env:
       CC: clang-${{ matrix.llvm_major }}

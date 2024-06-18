@@ -57,11 +57,11 @@ jobs:
             llvm_major: 19
             skip_valgrind: true   # cannot handle DWARF-5
 
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 17
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 18
-          - container: ubuntu:23.10
+          - container: ubuntu:24.04
             llvm_major: 19
 
     env:
