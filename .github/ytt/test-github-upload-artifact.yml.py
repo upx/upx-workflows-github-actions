@@ -45,6 +45,8 @@ containers = [
     'alpine:3.1', 'i386/alpine:3.1',
     'alpine:3.8', 'i386/alpine:3.8',
     'alpine:3.9', 'i386/alpine:3.9',
+    'alpine:3.10', 'i386/alpine:3.10',
+    'alpine:3.11', 'i386/alpine:3.11',
     'alpine:3.19', 'i386/alpine:3.19',
     'alpine:3.20', 'i386/alpine:3.20',
     'alpine:edge', 'i386/alpine:edge', # rolling
