@@ -46,6 +46,9 @@ jobs:
       - name: ${{ format('Install packages {0}', matrix.container) }}
         run: |
           apk update && apk upgrade && apk add cmake git i686-mingw-w64-gcc make
+      - run: set -x; $CC --version; $CXX --version
+      - run: $CC  -E -x c   -dM /dev/null
+      - run: $CXX -E -x c++ -dM /dev/null
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
           # git config

@@ -60,7 +60,10 @@ jobs:
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
       - run: brew list --versions
-        if: ${{ matrix.cc == 'clang' }} # only once per workflow
+
+      - run: set -x; $CC --version; $CXX --version
+      - run: $CC  -E -x c   -dM /dev/null # list predefined macros for C
+      - run: $CXX -E -x c++ -dM /dev/null # list predefined macros for C++
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
