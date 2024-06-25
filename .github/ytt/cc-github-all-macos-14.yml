@@ -12,8 +12,9 @@ env:
   CTEST_OUTPUT_ON_FAILURE: 'ON'
   DEBIAN_FRONTEND: noninteractive
   UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
-  UPX_CONFIG_DISABLE_SELF_PACK_TEST: 'ON' # macos-14
+  UPX_CONFIG_DISABLE_RUN_PACKED_TEST: 'ON' # macos-14
   UPX_CONFIG_EXPECT_THREADS: 'ON'
+  UPX_DEBUG_FORCE_PACK_MACOS: 1 # macos-14
   UPX_DEBUG_TEST_FLOAT_DIVISION_BY_ZERO: 1
   UPX_DEBUG_TEST_LIBC_QSORT: 1
   VERBOSE: 1
@@ -38,13 +39,9 @@ jobs:
           - { cc: 'clang', cxx: 'clang++' }           # AppleClang-15.0.0 (Xcode-15.0.1)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
           - { cc: 'clang-15', cxx: 'clang++-15' }
-####      - { cc: 'clang-16', cxx: 'clang++-16' }
-####      - { cc: 'clang-17', cxx: 'clang++-17' }
-####      - { cc: 'gcc-10', cxx: 'g++-10' }
           - { cc: 'gcc-11', cxx: 'g++-11' }
           - { cc: 'gcc-12', cxx: 'g++-12' }
           # { cc: 'gcc-13', cxx: 'g++-13' }
-####      - { cc: 'gcc-10 -static-libgcc', cxx: 'g++-10 -static-libgcc -static-libstdc++' }
           - { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
           - { cc: 'gcc-12 -static-libgcc', cxx: 'g++-12 -static-libgcc -static-libstdc++' }
           # { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
@@ -60,10 +57,6 @@ jobs:
           uname -a; pwd; id; umask
           env -0 | LC_ALL=C sort -z | tr '\000' '\n'
       - run: brew list --versions
-
-      - run: set -x; $CC --version; $CXX --version
-      - run: $CC  -E -x c   -dM /dev/null # list predefined macros for C
-      - run: $CXX -E -x c++ -dM /dev/null # list predefined macros for C++
 
       - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
         run: |
@@ -96,16 +89,30 @@ jobs:
             echo "CXX=$HOMEBREW_PREFIX/opt/llvm@17/bin/clang++" >> $GITHUB_ENV
           fi
 
+      - run: set -x; xcode-select -p || true; xcodebuild -version || true
+      - run: set -x; $CC --version; $CXX --version
+      - run: $CC  -E -x c   -dM /dev/null # list predefined macros for C
+      - run: $CXX -E -x c++ -dM /dev/null # list predefined macros for C++
+
       - name: ${{ format('Build Debug with {0} and {1}', matrix.cc, matrix.cxx) }}
         run: 'make build/debug'
       - name: ${{ format('Build Release with {0} and {1}', matrix.cc, matrix.cxx) }}
         run: 'make build/release'
 
-      - name: 'Run tests'
+      - name: Inspect binaries
+        run: |
+            ls -l build/*/upx
+            size build/*/upx || true
+            file build/*/upx || true
+
+      - name: Run ctest tests
         run: |
           ctest --test-dir build/debug   --parallel ${CTEST_JOBS:-8}
           ctest --test-dir build/release --parallel ${CTEST_JOBS:-8}
+      - name: Run file systems tests
+        run: |
           if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            export upx_test_file="$PWD"/build/release/upx
             (cd build/release && bash ../../misc/testsuite/test_symlinks.sh)
           fi
           true
