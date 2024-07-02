@@ -53,8 +53,8 @@ containers = [
     # Arch Linux
     'archlinux:latest', # rolling
     # CentOS (RHEL)
-    'quay.io/centos/centos:centos7',
-    'quay.io/centos/centos:stream8',
+    'quay.io/centos/centos:centos7', # EOL 2024-06-30
+    'quay.io/centos/centos:stream8', # EOL 2024-05-31
     'quay.io/centos/centos:stream9',
     'quay.io/centos/centos:stream9-minimal',
     # Chimera Linux

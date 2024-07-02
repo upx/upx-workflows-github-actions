@@ -36,8 +36,8 @@ jobs:
         include:
           - container: almalinux:8
           - container: almalinux:9
-          - container: quay.io/centos/centos:centos7
-            is_rhel_7: true
+          # container: quay.io/centos/centos:centos7 # EOL 2024-06-30; cannot update packages any longer
+          # is_rhel_7: true
           # container: quay.io/centos/centos:stream8 # EOL 2024-05-31; cannot update packages any longer
           - container: quay.io/centos/centos:stream9
           - container: quay.io/centos/centos:stream9-minimal
