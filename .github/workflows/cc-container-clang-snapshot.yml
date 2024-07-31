@@ -75,7 +75,7 @@ jobs:
       - name: ${{ format('Install llvm-{0}', matrix.llvm_major) }}
         run: |
           mkdir -p ../tmp && cd ../tmp
-          curl -OL https://apt.llvm.org/llvm.sh
+          curl -sS -L -O https://apt.llvm.org/llvm.sh
           bash ./llvm.sh ${{ matrix.llvm_major }} all
           ln -s -v ../../bin/clang-tidy-${{ matrix.llvm_major }} /usr/local/bin/clang-tidy
       - run: set -x; $CC --version; $CXX --version
