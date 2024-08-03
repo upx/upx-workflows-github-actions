@@ -34,10 +34,6 @@ jobs:
       matrix:
         include:
           - container: ubuntu:20.04
-            llvm_major: 17
-            skip_clang_tidy: true # cmake does not support CMAKE_EXPORT_COMPILE_COMMANDS
-            skip_qemu: true       # running compressed exe fails
-          - container: ubuntu:20.04
             llvm_major: 18
             skip_clang_tidy: true # cmake does not support CMAKE_EXPORT_COMPILE_COMMANDS
             skip_qemu: true       # running compressed exe fails
@@ -45,23 +41,27 @@ jobs:
             llvm_major: 19
             skip_clang_tidy: true # cmake does not support CMAKE_EXPORT_COMPILE_COMMANDS
             skip_qemu: true       # running compressed exe fails
+          - container: ubuntu:20.04
+            llvm_major: 20
+            skip_clang_tidy: true # cmake does not support CMAKE_EXPORT_COMPILE_COMMANDS
+            skip_qemu: true       # running compressed exe fails
 
-          - container: ubuntu:22.04
-            llvm_major: 17
-            skip_valgrind: true   # cannot handle DWARF-5
           - container: ubuntu:22.04
             llvm_major: 18
             skip_valgrind: true   # cannot handle DWARF-5
           - container: ubuntu:22.04
             llvm_major: 19
             skip_valgrind: true   # cannot handle DWARF-5
+          - container: ubuntu:22.04
+            llvm_major: 20
+            skip_valgrind: true   # cannot handle DWARF-5
 
-          - container: ubuntu:24.04
-            llvm_major: 17
           - container: ubuntu:24.04
             llvm_major: 18
           - container: ubuntu:24.04
             llvm_major: 19
+          - container: ubuntu:24.04
+            llvm_major: 20
 
     env:
       CC: clang-${{ matrix.llvm_major }}
