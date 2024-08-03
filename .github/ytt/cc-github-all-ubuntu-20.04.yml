@@ -4,7 +4,7 @@
 
 name: 'CC - GitHub all Ubuntu 20.04'
 'on':
-  schedule: [cron: '20 3 * * 2'] # run weekly Tuesday 03:20 UTC
+  schedule: [cron: '20 4 * * 2'] # run weekly Tuesday 04:20 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'

@@ -1,0 +1,143 @@
+# Copyright (C) Markus Franz Xaver Johannes Oberhumer
+# DO NOT EDIT, GENERATED AUTOMATICALLY
+name: CC - container ubuntu2004 apt.llvm.org
+"on":
+  schedule:
+    - cron: 00 3 * * 2
+  workflow_dispatch: null
+env:
+  CMAKE_REQUIRED_QUIET: "OFF"
+  CMAKE_VERBOSE_MAKEFILE: "ON"
+  CTEST_OUTPUT_ON_FAILURE: "ON"
+  DEBIAN_FRONTEND: noninteractive
+  UPX_CMAKE_CONFIG_FLAGS: -Wdev --warn-uninitialized
+  UPX_DEBUG_TEST_FLOAT_DIVISION_BY_ZERO: 1
+  UPX_DEBUG_TEST_LIBC_QSORT: 1
+  VERBOSE: 1
+  REMOTE_REF_NAME: test-threads
+  REMOTE_REF_TYPE: branch
+  REMOTE_REPOSITORY: upx/upx-test-threads
+  REMOTE_SERVER_URL: https://github.com
+  REMOTE_SHA: "0000000000000000000000000000000000000000"
+jobs:
+  clang:
+    if: github.repository_owner == 'upx'
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - llvm_major: 12
+          - llvm_major: 13
+          - llvm_major: 14
+          - llvm_major: 15
+          - llvm_major: 16
+          - llvm_major: 17
+          - llvm_major: 18
+          - llvm_major: 19
+          - llvm_major: 20
+    env:
+      container: ubuntu:20.04
+      CC: clang-${{ matrix.llvm_major }}
+      CXX: clang++-${{ matrix.llvm_major }}
+      SCAN_BUILD: scan-build-${{ matrix.llvm_major }}
+      skip_ctest: ${{ (matrix.skip_ctest != '') && matrix.skip_ctest || '' }}
+      skip_mimic_ctest: ${{ (matrix.skip_mimic_ctest != '') && matrix.skip_mimic_ctest || '1' }}
+      skip_qemu: ${{ (matrix.skip_qemu != '') && matrix.skip_qemu || '1' }}
+      skip_valgrind: ${{ (matrix.skip_valgrind != '') && matrix.skip_valgrind || '1' }}
+      skip_clang_analyzer: ${{ (matrix.skip_clang_analyzer != '') && matrix.skip_clang_analyzer || '1' }}
+      skip_clang_tidy: ${{ (matrix.skip_clang_tidy != '') && matrix.skip_clang_tidy || '1' }}
+    steps:
+      - name: Display environment
+        run: |
+          uname -a; pwd; id; umask
+          env | LC_ALL=C sort
+          dpkg -l
+      - name: ${{ format('Install packages {0}', env.container) }}
+        run: |
+          apt-get update && apt-get upgrade -y
+          apt-get install -y bash cmake curl file git make parallel qemu-user time valgrind
+          apt-get install -y gnupg lsb-release software-properties-common wget
+          mkdir -p ~/.parallel && : > ~/.parallel/$(echo 6305-4721 | tr 0-7 leticlwi)
+      - name: ${{ format('Install llvm-{0}', matrix.llvm_major) }}
+        run: |
+          mkdir -p ../tmp && cd ../tmp
+          curl -sS -L -O https://apt.llvm.org/llvm.sh
+          bash ./llvm.sh ${{ matrix.llvm_major }} all
+          ln -s -v ../../bin/clang-tidy-${{ matrix.llvm_major }} /usr/local/bin/clang-tidy
+      - run: set -x; $CC --version; $CXX --version
+      - run: $CC  -E -x c   -dM /dev/null
+      - run: $CXX -E -x c++ -dM /dev/null
+      - name: ${{ format('Check out {0}/{1} {2} {3} source code', env.REMOTE_SERVER_URL, env.REMOTE_REPOSITORY, env.REMOTE_REF_TYPE, env.REMOTE_REF_NAME) }}
+        run: |
+          # git config
+          git config --global core.autocrlf false
+          git config --global --add safe.directory '*'
+          # install Self, needed for config file below
+          ##git clone --branch "$GITHUB_REF_NAME" --depth 1 "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" ../Self
+
+          git clone --branch "$REMOTE_REF_NAME" --depth 1 "$REMOTE_SERVER_URL/$REMOTE_REPOSITORY" .
+          test -f ./.gitmodules && git submodule update --init
+          # TODO: handle REMOTE_REF_TYPE == "tag"
+          # update environment
+          rev="$(git rev-parse HEAD)"
+          echo "REMOTE_SHA=$rev" >> $GITHUB_ENV
+      - name: ${{ format('Build Debug with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/debug
+      - name: ${{ format('Build Release with {0} and {1}', env.CC, env.CXX) }}
+        run: make build/release
+      - name: Inspect binaries
+        run: |
+          ls -l build/*/upx
+          size build/*/upx
+          file build/*/upx
+      - name: Run ctest tests
+        if: ${{ !env.skip_ctest }}
+        run: |
+          make build/debug+test
+          make build/release+test
+          if test -f ./misc/testsuite/test_symlinks.sh; then true;
+            apt-get install -y sudo
+            # IMPORTANT: do NOT run as user root!
+            (cd build/release && chmod a+w . && sudo -u nobody bash ../../misc/testsuite/test_symlinks.sh)
+          fi
+          true
+      - name: Mimic ctest tests
+        if: ${{ !env.skip_mimic_ctest }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            jobs="debug release"
+            echo "===== parallel jobs: $jobs"
+            parallel -kv --lb 'cd build/{} && bash ../../misc/testsuite/mimic_ctest.sh' ::: $jobs
+          fi
+          true
+      - name: Mimic ctest tests QEMU
+        if: ${{ !env.skip_qemu }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            case "${{ env.container }}" in
+              i386/*) export upx_exe_runner=qemu-i386 ;;
+              *)      export upx_exe_runner=qemu-x86_64 ;;
+            esac
+            jobs="debug release"
+            echo "===== parallel jobs: $jobs"
+            parallel -kv --lb 'cd build/{} && bash ../../misc/testsuite/mimic_ctest.sh' ::: $jobs
+          fi
+          true
+      - name: Mimic ctest tests Valgrind
+        if: ${{ !env.skip_valgrind }}
+        run: |
+          if test -f ./misc/testsuite/mimic_ctest.sh; then true;
+            export upx_exe_runner="valgrind --leak-check=no --error-exitcode=1 --quiet --gen-suppressions=all"
+            jobs="debug release"
+            echo "===== parallel jobs: $jobs"
+            parallel -kv --lb 'cd build/{} && bash ../../misc/testsuite/mimic_ctest.sh' ::: $jobs
+          fi
+          true
+      - name: Analyze clang-analyzer
+        if: ${{ !env.skip_clang_analyzer }}
+        run: make build/analyze/clang-analyzer/all SCAN_BUILD="$SCAN_BUILD" CCC_CC="$CC" CCC_CXX="$CXX"
+      - name: Analyze clang-tidy
+        if: ${{ !env.skip_clang_tidy }}
+        run: make -k build/analyze/clang-tidy/all CLANG_TIDY_BUILD_BASE=build CC="$CC" CXX="$CXX"
