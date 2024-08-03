@@ -1,5 +1,5 @@
 # Copyright (C) Markus Franz Xaver Johannes Oberhumer
-# see https://apt.llvm.org/
+# see https://copr.fedorainfracloud.org/coprs/jwakely/gcc-latest/
 #
 
 name: 'CC - container gcc-snapshot'
