@@ -37,10 +37,10 @@ jobs:
           - { cc: 'clang', cxx: 'clang++' }           # AppleClang-14.0.0 (Xcode-14.2)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
           - { cc: 'clang-15', cxx: 'clang++-15' }
-          - { cc: 'gcc-11', cxx: 'g++-11' }
+          # { cc: 'gcc-11', cxx: 'g++-11' }
           - { cc: 'gcc-12', cxx: 'g++-12' }
           # { cc: 'gcc-13', cxx: 'g++-13' }           # gcc-13 does not work any longer on macos-12 image
-          - { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
+          # { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
           - { cc: 'gcc-12 -static-libgcc', cxx: 'g++-12 -static-libgcc -static-libstdc++' }
           # { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
 
