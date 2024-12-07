@@ -25,6 +25,7 @@ BUILT_FILES += ../workflows/cc-container-ubuntu2204-apt-llvm-org.yml
 BUILT_FILES += ../workflows/cc-container-ubuntu2404-apt-llvm-org.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-13.yml
 BUILT_FILES += ../workflows/cc-github-all-macos-14.yml
+BUILT_FILES += ../workflows/cc-github-all-macos-15.yml
 BUILT_FILES += ../workflows/cc-github-all-ubuntu-20.04.yml
 BUILT_FILES += ../workflows/cc-github-all-ubuntu-22.04.yml
 BUILT_FILES += ../workflows/cc-github-all-ubuntu-24.04.yml
