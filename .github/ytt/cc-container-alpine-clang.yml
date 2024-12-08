@@ -48,7 +48,8 @@ jobs:
           - container: 'alpine:3.18'      # clang-16.0.6
           - container: 'alpine:3.19'      # clang-17.0.5
           - container: 'alpine:3.20'      # clang-17.0.6
-          - container: 'alpine:edge'      # clang-18.1.8
+          - container: 'alpine:3.21'      # clang-19
+          - container: 'alpine:edge'      # clang-19
           # 32-bit i386 versions
           # container: 'i386/alpine:3.9'  # clang-5.0.2   BROKEN: build fails
           # container: 'i386/alpine:3.10' # clang-8.0.0   BROKEN: test crashes; static-works
@@ -64,7 +65,8 @@ jobs:
           - container: 'i386/alpine:3.18' # clang-16.0.6
           - container: 'i386/alpine:3.19' # clang-17.0.5
           - container: 'i386/alpine:3.20' # clang-17.0.6
-          - container: 'i386/alpine:edge' # clang-18.1.8
+          - container: 'i386/alpine:3.21' # clang-19
+          - container: 'i386/alpine:edge' # clang-19
 
     env:
       CC: 'clang'
