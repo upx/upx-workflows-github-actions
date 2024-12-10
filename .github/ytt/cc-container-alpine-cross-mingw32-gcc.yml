@@ -36,8 +36,8 @@ jobs:
           - { container: 'alpine:3.18' } # i686-mingw-w64-gcc-12.2    crt-11.0.0
           - { container: 'alpine:3.19' } # i686-mingw-w64-gcc-13.2    crt-11.0.1
           - { container: 'alpine:3.20' } # i686-mingw-w64-gcc-13.2    crt-11.0.1
-          - { container: 'alpine:3.21' } # i686-mingw-w64-gcc-13.2    crt-11.0.1
-          - { container: 'alpine:edge' } # i686-mingw-w64-gcc-13.2    crt-11.0.1
+          - { container: 'alpine:3.21' } # i686-mingw-w64-gcc-14.2    crt-12.0.0
+          - { container: 'alpine:edge' } # i686-mingw-w64-gcc-14.2    crt-12.0.0
 
     env:
       CC: 'i686-w64-mingw32-gcc -static'
