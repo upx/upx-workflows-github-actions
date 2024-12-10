@@ -4,7 +4,7 @@
 
 name: 'CC - GitHub all macOS 15'
 'on':
-  schedule: [cron: '16 4 * * 2'] # run weekly Tuesday 04:15 UTC
+  schedule: [cron: '15 4 * * 2'] # run weekly Tuesday 04:15 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'
@@ -35,15 +35,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-16.0.0 (Xcode-16.0.0)
+          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-16.0.0 (Xcode-16.0)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
-          # { cc: 'clang-15', cxx: 'clang++-15' }
-          # { cc: 'gcc-11', cxx: 'g++-11' }
+          # { cc: 'clang-18', cxx: 'clang++-18' }
           # { cc: 'gcc-12', cxx: 'g++-12' }
-          # { cc: 'gcc-13', cxx: 'g++-13' }
-          # { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-13', cxx: 'g++-13' }
+          - { cc: 'gcc-14', cxx: 'g++-14' }
           # { cc: 'gcc-12 -static-libgcc', cxx: 'g++-12 -static-libgcc -static-libstdc++' }
-          # { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-14 -static-libgcc', cxx: 'g++-14 -static-libgcc -static-libstdc++' }
 
     env:
       CC: ${{ matrix.cc }}
@@ -86,6 +86,9 @@ jobs:
           elif test "$CC" = "clang-17"; then
             echo "PATH=$HOMEBREW_PREFIX/opt/llvm@17/bin:$PATH" >> $GITHUB_ENV
             echo "CXX=$HOMEBREW_PREFIX/opt/llvm@17/bin/clang++" >> $GITHUB_ENV
+          elif test "$CC" = "clang-18"; then
+            echo "PATH=$HOMEBREW_PREFIX/opt/llvm@18/bin:$PATH" >> $GITHUB_ENV
+            echo "CXX=$HOMEBREW_PREFIX/opt/llvm@18/bin/clang++" >> $GITHUB_ENV
           fi
 
       - run: set -x; xcode-select -p || true; xcodebuild -version || true

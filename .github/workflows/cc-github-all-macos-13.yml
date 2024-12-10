@@ -3,7 +3,7 @@
 name: CC - GitHub all macOS 13
 "on":
   schedule:
-    - cron: 10 4 * * 2
+    - cron: 05 4 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -38,10 +38,14 @@ jobs:
             cxx: g++-12
           - cc: gcc-13
             cxx: g++-13
+          - cc: gcc-14
+            cxx: g++-14
           - cc: gcc-12 -static-libgcc
             cxx: g++-12 -static-libgcc -static-libstdc++
           - cc: gcc-13 -static-libgcc
             cxx: g++-13 -static-libgcc -static-libstdc++
+          - cc: gcc-14 -static-libgcc
+            cxx: g++-14 -static-libgcc -static-libstdc++
     env:
       CC: ${{ matrix.cc }}
       CXX: ${{ matrix.cxx }}

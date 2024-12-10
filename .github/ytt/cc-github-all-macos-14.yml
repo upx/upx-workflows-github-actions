@@ -4,7 +4,7 @@
 
 name: 'CC - GitHub all macOS 14'
 'on':
-  schedule: [cron: '15 4 * * 2'] # run weekly Tuesday 04:15 UTC
+  schedule: [cron: '10 4 * * 2'] # run weekly Tuesday 04:10 UTC
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: 'OFF'
@@ -34,17 +34,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # @BUG: gcc-13 currently does not work: internal error in ld::AtomPlacement::findAtom()
         include:
-          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-15.0.0 (Xcode-15.0.1)
+          - { cc: 'clang', cxx: 'clang++' }           # AppleClang-15.0.0 (Xcode-15.4)
           # { cc: 'gcc', cxx: 'g++' }                 # => same as clang
           - { cc: 'clang-15', cxx: 'clang++-15' }
-          # { cc: 'gcc-11', cxx: 'g++-11' }
           - { cc: 'gcc-12', cxx: 'g++-12' }
-          # { cc: 'gcc-13', cxx: 'g++-13' }
-          # { cc: 'gcc-11 -static-libgcc', cxx: 'g++-11 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-13', cxx: 'g++-13' }
+          - { cc: 'gcc-14', cxx: 'g++-14' }
           - { cc: 'gcc-12 -static-libgcc', cxx: 'g++-12 -static-libgcc -static-libstdc++' }
-          # { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-13 -static-libgcc', cxx: 'g++-13 -static-libgcc -static-libstdc++' }
+          - { cc: 'gcc-14 -static-libgcc', cxx: 'g++-14 -static-libgcc -static-libstdc++' }
 
     env:
       CC: ${{ matrix.cc }}

@@ -3,7 +3,7 @@
 name: CC - GitHub all macOS 15
 "on":
   schedule:
-    - cron: 16 4 * * 2
+    - cron: 15 4 * * 2
   workflow_dispatch: null
 env:
   CMAKE_REQUIRED_QUIET: "OFF"
@@ -32,6 +32,14 @@ jobs:
         include:
           - cc: clang
             cxx: clang++
+          - cc: gcc-13
+            cxx: g++-13
+          - cc: gcc-14
+            cxx: g++-14
+          - cc: gcc-13 -static-libgcc
+            cxx: g++-13 -static-libgcc -static-libstdc++
+          - cc: gcc-14 -static-libgcc
+            cxx: g++-14 -static-libgcc -static-libstdc++
     env:
       CC: ${{ matrix.cc }}
       CXX: ${{ matrix.cxx }}
@@ -69,6 +77,9 @@ jobs:
           elif test "$CC" = "clang-17"; then
             echo "PATH=$HOMEBREW_PREFIX/opt/llvm@17/bin:$PATH" >> $GITHUB_ENV
             echo "CXX=$HOMEBREW_PREFIX/opt/llvm@17/bin/clang++" >> $GITHUB_ENV
+          elif test "$CC" = "clang-18"; then
+            echo "PATH=$HOMEBREW_PREFIX/opt/llvm@18/bin:$PATH" >> $GITHUB_ENV
+            echo "CXX=$HOMEBREW_PREFIX/opt/llvm@18/bin/clang++" >> $GITHUB_ENV
           fi
       - run: set -x; xcode-select -p || true; xcodebuild -version || true
       - run: set -x; $CC --version; $CXX --version
