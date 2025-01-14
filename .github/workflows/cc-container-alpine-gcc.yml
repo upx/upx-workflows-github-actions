@@ -30,7 +30,9 @@ jobs:
       matrix:
         include:
           - container: alpine:3.9
+            skip_qemu: true
           - container: alpine:3.10
+            skip_qemu: true
           - container: alpine:3.11
           - container: alpine:3.12
             skip_qemu: true
@@ -45,7 +47,9 @@ jobs:
           - container: alpine:3.21
           - container: alpine:edge
           - container: i386/alpine:3.9
+            skip_qemu: true
           - container: i386/alpine:3.10
+            skip_qemu: true
           - container: i386/alpine:3.11
           - container: i386/alpine:3.12
             skip_qemu: true

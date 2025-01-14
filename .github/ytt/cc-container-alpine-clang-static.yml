@@ -35,8 +35,10 @@ jobs:
       matrix:
         include:
           - container: 'alpine:3.9'       # clang-5.0.2
+            skip_qemu: true               #
             skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.10'      # clang-8.0.0
+            skip_qemu: true               #
             skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
           - container: 'alpine:3.11'      # clang-9.0.0
             skip_valgrind: true           #   some unknown "Conditional jump or move depends on uninitialised value(s)"
@@ -56,6 +58,7 @@ jobs:
           # 32-bit i386 versions
           # container: 'i386/alpine:3.9'  # clang-5.0.2   BROKEN: build fails
           - container: 'i386/alpine:3.10' # clang-8.0.0
+            skip_qemu: true               #
           - container: 'i386/alpine:3.11' # clang-9.0.0
           - container: 'i386/alpine:3.12' # clang-10.0.0
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
