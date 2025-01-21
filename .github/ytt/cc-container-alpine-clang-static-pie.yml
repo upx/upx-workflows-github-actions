@@ -49,6 +49,7 @@ jobs:
           - container: 'alpine:3.19'      # clang-17.0.5
           - container: 'alpine:3.20'      # clang-17.0.6
           - container: 'alpine:3.21'      # clang-19
+            skip_qemu: true               #
           - container: 'alpine:edge'      # clang-19
           # 32-bit i386 versions
           - container: 'i386/alpine:3.11' # clang-9.0.0
