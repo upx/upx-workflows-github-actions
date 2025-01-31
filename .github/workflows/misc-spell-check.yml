@@ -5,9 +5,9 @@ name: Misc - Spell check
   workflow_dispatch: null
 env:
   DEBIAN_FRONTEND: noninteractive
-  REMOTE_REF_NAME: devel
+  REMOTE_REF_NAME: test-threads
   REMOTE_REF_TYPE: branch
-  REMOTE_REPOSITORY: upx/upx
+  REMOTE_REPOSITORY: upx/upx-test-threads
   REMOTE_SERVER_URL: https://github.com
   REMOTE_SHA: "0000000000000000000000000000000000000000"
 jobs:

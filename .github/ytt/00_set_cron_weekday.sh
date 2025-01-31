@@ -15,5 +15,5 @@ perl -i -pe 's,\b(REMOTE_REF_NAME:)\s+([\w/-]+)$,$1 devel,;' *.yml
 perl -i -pe 's,\b(REMOTE_REPOSITORY:)\s+([\w/-]+)$,$1 upx/upx-test-threads,;' *.yml
 perl -i -pe 's,\b(REMOTE_REF_NAME:)\s+([\w/-]+)$,$1 test-threads,;' *.yml
 
-perl -i -pe 's,\b(REMOTE_REPOSITORY:)\s+([\w/-]+)$,$1 upx/upx,;' *.yml
-perl -i -pe 's,\b(REMOTE_REF_NAME:)\s+([\w/-]+)$,$1 devel,;' *.yml
+#perl -i -pe 's,\b(REMOTE_REPOSITORY:)\s+([\w/-]+)$,$1 upx/upx,;' *.yml
+#perl -i -pe 's,\b(REMOTE_REF_NAME:)\s+([\w/-]+)$,$1 devel,;' *.yml
