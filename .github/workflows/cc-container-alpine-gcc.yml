@@ -53,7 +53,6 @@ jobs:
           - container: i386/alpine:3.11
           - container: i386/alpine:3.12
             skip_qemu: true
-          - container: i386/alpine:3.13
           - container: i386/alpine:3.14
           - container: i386/alpine:3.15
           - container: i386/alpine:3.16
