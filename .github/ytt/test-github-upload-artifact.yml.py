@@ -49,6 +49,8 @@ containers = [
     'alpine:3.11', 'i386/alpine:3.11',
     'alpine:3.19', 'i386/alpine:3.19',
     'alpine:3.20', 'i386/alpine:3.20',
+    'alpine:3.21', 'i386/alpine:3.21',
+    'alpine:3.22', 'i386/alpine:3.22',
     'alpine:edge', 'i386/alpine:edge', # rolling
     # Arch Linux
     'archlinux:latest', # rolling
@@ -67,7 +69,7 @@ containers = [
     'debian:unstable-slim', 'i386/debian:unstable-slim', # rolling
     # Fedora Linux
     'fedora:30',
-    'fedora:40',
+    'fedora:42',
     'fedora:rawhide', # rolling
     # openSUSE
     'opensuse/leap:15.0',

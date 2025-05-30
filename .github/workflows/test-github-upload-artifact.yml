@@ -182,6 +182,50 @@ jobs:
         with:
           name: job-i386_alpine_3_20
           path: test.txt
+  job-alpine_3_21:
+    container: alpine:3.21
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-alpine_3_21
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_21
+          path: test.txt
+  job-i386_alpine_3_21:
+    container: i386/alpine:3.21
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-i386_alpine_3_21
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_21
+          path: test.txt
+  job-alpine_3_22:
+    container: alpine:3.22
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-alpine_3_22
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-alpine_3_22
+          path: test.txt
+  job-i386_alpine_3_22:
+    container: i386/alpine:3.22
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make artifact
+        run: echo TEST > test.txt
+      - name: Upload artifact job-i386_alpine_3_22
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-i386_alpine_3_22
+          path: test.txt
   job-alpine_edge:
     container: alpine:edge
     runs-on: ubuntu-latest
@@ -391,16 +435,16 @@ jobs:
         with:
           name: job-fedora_30
           path: test.txt
-  job-fedora_40:
-    container: fedora:40
+  job-fedora_42:
+    container: fedora:42
     runs-on: ubuntu-latest
     steps:
       - name: Make artifact
         run: echo TEST > test.txt
-      - name: Upload artifact job-fedora_40
+      - name: Upload artifact job-fedora_42
         uses: actions/upload-artifact@v4
         with:
-          name: job-fedora_40
+          name: job-fedora_42
           path: test.txt
   job-fedora_rawhide:
     container: fedora:rawhide

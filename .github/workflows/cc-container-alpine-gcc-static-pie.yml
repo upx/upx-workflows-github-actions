@@ -49,6 +49,7 @@ jobs:
           - container: alpine:3.19
           - container: alpine:3.20
           - container: alpine:3.21
+          - container: alpine:3.22
           - container: alpine:edge
           - container: i386/alpine:3.9
             skip_qemu: true
@@ -66,6 +67,7 @@ jobs:
           - container: i386/alpine:3.19
           - container: i386/alpine:3.20
           - container: i386/alpine:3.21
+          - container: i386/alpine:3.22
           - container: i386/alpine:edge
     env:
       CC: gcc -static-pie -fPIE

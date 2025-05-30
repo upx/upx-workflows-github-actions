@@ -54,7 +54,8 @@ jobs:
           - container: 'alpine:3.19'      # gcc-13.2
           - container: 'alpine:3.20'      # gcc-13.2
           - container: 'alpine:3.21'      # gcc-14.2
-          - container: 'alpine:edge'      # gcc-14.2
+          - container: 'alpine:3.22'      # gcc-14.2
+          - container: 'alpine:edge'      # gcc-14.3
           # 32-bit i386 versions
           - container: 'i386/alpine:3.9'  # gcc-8.3
             skip_qemu: true               #
@@ -72,7 +73,8 @@ jobs:
           - container: 'i386/alpine:3.19' # gcc-13.2
           - container: 'i386/alpine:3.20' # gcc-13.2
           - container: 'i386/alpine:3.21' # gcc-14.2
-          - container: 'i386/alpine:edge' # gcc-14.2
+          - container: 'i386/alpine:3.22' # gcc-14.2
+          - container: 'i386/alpine:edge' # gcc-14.3
 
     env:
       CC: 'gcc -static'
