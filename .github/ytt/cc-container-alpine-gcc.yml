@@ -36,8 +36,8 @@ jobs:
         include:
           - container: 'alpine:3.9'       # gcc-8.3
             skip_qemu: true               #
-          - container: 'alpine:3.10'      # gcc-8.3
-            skip_qemu: true               #
+          # container: 'alpine:3.10'      # gcc-8.3
+          # skip_qemu: true               #
           - container: 'alpine:3.11'      # gcc-9.3
           - container: 'alpine:3.12'      # gcc-9.3
             skip_qemu: true               #   qemu-5.0.0-r2 is BROKEN
