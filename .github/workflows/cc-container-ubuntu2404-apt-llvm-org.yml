@@ -33,6 +33,7 @@ jobs:
           - llvm_major: 18
           - llvm_major: 19
           - llvm_major: 20
+          - llvm_major: 21
     env:
       container: ubuntu:24.04
       CC: clang-${{ matrix.llvm_major }}
